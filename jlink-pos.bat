@@ -1,5 +1,5 @@
 
-rem jdeps --class-path ./dist/lib/*  -recursive --multi-release 11 ./dist/lib/chromispos.jar > files.txt
+rem jdeps --class-path ./dist/lib/*  -recursive --multi-release 11 ./dist/lib/kalc.jar > files.txt
 
 rmdir /s /q jre
 

@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import uk.chromis.pos.sales.JPanelTicket;
+import uk.kalc.pos.sales.JPanelTicket;
 
 /**
  *
