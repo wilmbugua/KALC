@@ -1,5 +1,5 @@
 /*
-**    KALC POS  - Open Source Point of Sale
+**    KALC POS  - Professional Point of Sale
 **
 **    This file is part of KALC POS Version KALC V1.5.4
 **
@@ -7,18 +7,6 @@
 **
 **    https://www.KALC.co.uk
 **   
-**    KALC POS is free software: you can redistribute it and/or modify
-**    it under the terms of the GNU General Public License as published by
-**    the Free Software Foundation, either version 3 of the License, or
-**    (at your option) any later version.
-**
-**    KALC POS is distributed in the hope that it will be useful,
-**    but WITHOUT ANY WARRANTY; without even the implied warranty of
-**    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-**    GNU General Public License for more details.
-**
-**    You should have received a copy of the GNU General Public License
-**    along with KALC POS.  If not, see <http://www.gnu.org/licenses/>
 **
  */
 package ke.kalc.pos.forms;
@@ -179,15 +167,13 @@ public class JRootApp extends JPanel implements AppView {
 
      //   logoLabel.setIcon(scaleImage(SystemProperty.STARTLOGO, 1024, 350));
 
-        KALCText.setText("<html><center><b>KALC POS - Free Open Source POS Solution</b><br>"
+        KALCText.setText("<html><center><b>KALC POS - Professional Point of Sale</b><br>"
                 + "Copyright \u00A9 2015 - 2023 KALC <br>"
                 + "http://www.KALC.co.uk<br>"
                 + "<br>"
-                + "KALC POS is Open Source Software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>"
+                + "KALC POS is proprietary commercial software. All rights reserved.<br>"
                 + "<br>"
-                + "KALC POS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.<br>"
-                + "<br>"
-                + "You should have received a copy of the GNU General Public License along with KALC POS.  If not, see http://www.gnu.org/licenses/<br>"
+                + "Use of this software is subject to the KALC POS License Agreement.<br>"
                 + "</center>");
         KALCText.setPreferredSize(new java.awt.Dimension(800, 300));
         KALCText.setFont(KALCFonts.DEFAULTFONT.deriveFont(14f));
@@ -755,16 +741,14 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setFont(KALCFonts.DEFAULTFONT.deriveFont(12f));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(IconFactory.getIcon("kalclogo.png"));
-        jLabel1.setText("<html><center><b>KALC POS - Free Open Source POS Solution</b><br>" +
-            "Copyright \u00A9 2015 - 2023 KALC <br>" +
-            "http://www.KALC.co.uk<br>" +
-            "<br>" +
-            "KALC POS is Open Source Software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +
-            "<br>" +
-            "KALC POS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.<br>" +
-            "<br>" +
-            "You should have received a copy of the GNU General Public License along with KALC POS.  If not, see http://www.gnu.org/licenses/<br>" +
-            "</center>");
+        jLabel1.setText("<html><center><b>KALC POS - Professional Point of Sale</b><br>"
+            + "Copyright \u00A9 2015 - 2023 KALC <br>"
+            + "http://www.KALC.co.uk<br>"
+            + "<br>"
+            + "KALC POS is proprietary commercial software. All rights reserved.<br>"
+            + "<br>"
+            + "Use of this software is subject to the KALC POS License Agreement.<br>"
+            + "</center>");
         jLabel1.setAlignmentX(0.5F);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setMaximumSize(new java.awt.Dimension(800, 1024));
