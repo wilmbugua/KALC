@@ -23,6 +23,7 @@
 - [x] Added locale properties for new features and buttons
 - [x] Limited payment methods to cash, mpesa, and card only as requested
 - [x] Card payments now require manager/super waiter approval (pending status)
+- [x] Updated all images in src-beans/ke/kalc/fixedimages/ to KALC POS branding (replaced existing image files with new branded images)
 
 ## Current State
 - All features implemented and committed to repository
@@ -33,9 +34,5 @@
 - Super waiter role can confirm pending Mpesa payments
 - Restaurant interface has Recall, Modify, Merge, Split bill buttons
 - Repository is clean with all changes committed locally
+- Images updated to KALC POS branding
 - Ready for integration into sales reporting or other modules as needed
-
-## Current State
-- Waiting commission feature implemented and ready for testing
-- Login page changes completed and committed
-- Repository is clean with all changes committed locally
