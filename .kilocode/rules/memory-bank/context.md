@@ -13,6 +13,13 @@
 - [x] Updated JAlertPane.loginDialog() to return empty string for username (since not used)
 - [x] Created LoginSettingsDialog for admin to configure restaurant image path
 - [x] Fixed AppConfig.getProperty() to return actual property values
+- [x] Created test class for CommissionUtils to verify calculations
+
+## Current State
+- Waiter commission feature implemented as a utility class (CommissionUtils)
+- Login page changes completed and committed
+- Repository is clean with all changes committed locally
+- Ready for integration into sales reporting or other modules as needed
 
 ## Current State
 - Waiting commission feature implemented and ready for testing
