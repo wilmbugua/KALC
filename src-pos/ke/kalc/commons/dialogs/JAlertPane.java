@@ -143,7 +143,7 @@ public class JAlertPane extends JDialog {
         jAlert.setLocation(x, y);
         jAlert.setAlwaysOnTop(true);
         jAlert.setVisible(true);
-        return new Object[]{jAlert.getChoice(), jAlert.getUserName(), jAlert.getPassword()};
+        return new Object[]{jAlert.getChoice(), "", jAlert.getPassword()};
     }
 
     public static Object[] closedCashBox() {

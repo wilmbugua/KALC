@@ -251,7 +251,7 @@ public class AppConfig implements AppProperties {
 
     @Override
     public String getProperty(String sKey) {
-        return null;
+        return config.getString(sKey, null);
     }
 
     public static String getVersion() {
