@@ -1,0 +1,10 @@
+// MAIN
+group = menu.addGroup("menu.main");
+        group.addPanel("sale.png", "menu.ticket", "ke.kalc.pos.sales.JPanelTicketSales");
+        group.addPanel("saleedit.png", "menu.ticketEdit", "ke.kalc.pos.sales.JPanelTicketEdits");
+        group.addPanel("customerpay.png", "menu.customerPayment", "ke.kalc.pos.customers.CustomersPayment");
+        group.addPanel("payments.png", "menu.payments", "ke.kalc.pos.panels.JPanelPayments");
+        group.addPanel("calculator.png", "menu.closeCash", "ke.kalc.pos.panels.JPanelCloseMoney");
+	group.addPanel("printer.png", "menu.printer", "ke.kalc.pos.panels.JPanelPrinter");
+    	group.addPanel("timer.png", "menu.checkInCheckOut", "ke.kalc.pos.epm.JPanelEmployeePresence");
+
