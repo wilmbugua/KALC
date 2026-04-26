@@ -525,6 +525,29 @@ public abstract class JPaymentSelect extends javax.swing.JDialog implements JPay
         }
     }
 
+    public class JPaymentMpesaCreator implements JPaymentCreator {
+
+        @Override
+        public JPaymentInterface createJPayment() {
+            return new JPaymentMpesa(JPaymentSelect.this);
+        }
+
+        @Override
+        public String getKey() {
+            return "payment.mpesa";
+        }
+
+        @Override
+        public String getLabelKey() {
+            return "tab.mpesa";
+        }
+
+        @Override
+        public String getIconKey() {
+            return "mpesa.png"; // You may need to add this icon
+        }
+    }
+
     public class JPaymentDebtCreator implements JPaymentCreator {
 
         @Override

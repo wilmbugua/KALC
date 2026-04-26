@@ -75,6 +75,7 @@ public class JPaymentSelectReceipt extends JPaymentSelect {
         addTabPayment(new JPaymentSelect.JPaymentMagcardCustom5Creator());
         addTabPayment(new JPaymentSelect.JPaymentChequeCreator());
         addTabPayment(new JPaymentSelect.JPaymentPaperCreator());
+        addTabPayment(new JPaymentSelect.JPaymentMpesaCreator()); // Added Mpesa payment option
 
         addTabPayment(new JPaymentSelect.JPaymentFreeCreator());
         if (customerext != null && customerext.getMaxDebt() != 0.00) {

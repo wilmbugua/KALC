@@ -927,6 +927,60 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
             }
         });
         jPanel2.add(btnActionMenu);
+        
+        // Add Recall button
+        btnRecall = new javax.swing.JButton();
+        btnRecall.setIcon(IconFactory.getIcon("recall.png"));
+        btnRecall.setText(AppLocal.getIntString("button.recall"));
+        btnRecall.setFocusPainted(false);
+        btnRecall.setFocusable(false);
+        btnRecall.setMargin(new java.awt.Insets(0, 4, 0, 4));
+        btnRecall.setMaximumSize(new java.awt.Dimension(80, 40));
+        btnRecall.setMinimumSize(new java.awt.Dimension(80, 40));
+        btnRecall.setPreferredSize(new java.awt.Dimension(82, 40));
+        btnRecall.setRequestFocusEnabled(false);
+        btnRecall.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecallActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnRecall);
+        
+        // Add Modify button
+        btnModify = new javax.swing.JButton();
+        btnModify.setIcon(IconFactory.getIcon("modify.png"));
+        btnModify.setText(AppLocal.getIntString("button.modify"));
+        btnModify.setFocusPainted(false);
+        btnModify.setFocusable(false);
+        btnModify.setMargin(new java.awt.Insets(0, 4, 0, 4));
+        btnModify.setMaximumSize(new java.awt.Dimension(80, 40));
+        btnModify.setMinimumSize(new java.awt.Dimension(80, 40));
+        btnModify.setPreferredSize(new java.awt.Dimension(82, 40));
+        btnModify.setRequestFocusEnabled(false);
+        btnModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnModify);
+        
+        // Add Merge button
+        btnMerge = new javax.swing.JButton();
+        btnMerge.setIcon(IconFactory.getIcon("merge.png"));
+        btnMerge.setText(AppLocal.getIntString("button.merge"));
+        btnMerge.setFocusPainted(false);
+        btnMerge.setFocusable(false);
+        btnMerge.setMargin(new java.awt.Insets(0, 4, 0, 4));
+        btnMerge.setMaximumSize(new java.awt.Dimension(80, 40));
+        btnMerge.setMinimumSize(new java.awt.Dimension(80, 40));
+        btnMerge.setPreferredSize(new java.awt.Dimension(82, 40));
+        btnMerge.setRequestFocusEnabled(false);
+        btnMerge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMergeActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnMerge);
 
         btnLogout.setIcon(IconFactory.getIcon("logout.png"));
         btnLogout.setFocusPainted(false);
@@ -1102,11 +1156,32 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         btnOverride.setEnabled(false);
     }//GEN-LAST:event_btnOverrideActionPerformed
 
+    private void btnRecallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecallActionPerformed
+        // TODO: Implement recall ticket functionality
+        JAlertPane.messageBox(JAlertPane.INFORMATION, AppLocal.getIntString("message.feature.not.implemented"), 16, 
+                new Dimension(125, 50), JAlertPane.OK_OPTION);
+    }//GEN-LAST:event_btnRecallActionPerformed
+
+    private void btnModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyActionPerformed
+        // TODO: Implement modify ticket functionality
+        JAlertPane.messageBox(JAlertPane.INFORMATION, AppLocal.getIntString("message.feature.not.implemented"), 16, 
+                new Dimension(125, 50), JAlertPane.OK_OPTION);
+    }//GEN-LAST:event_btnModifyActionPerformed
+
+    private void btnMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMergeActionPerformed
+        // TODO: Implement merge ticket functionality (similar to existing move/merge logic)
+        JAlertPane.messageBox(JAlertPane.INFORMATION, AppLocal.getIntString("message.feature.not.implemented"), 16, 
+                new Dimension(125, 50), JAlertPane.OK_OPTION);
+    }//GEN-LAST:event_btnMergeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActionMenu;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnOverride;
+    private javax.swing.JButton btnRecall;
+    private javax.swing.JButton btnModify;
+    private javax.swing.JButton btnMerge;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton m_btnSavePlaces;
