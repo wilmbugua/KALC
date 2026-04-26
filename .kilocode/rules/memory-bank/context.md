@@ -16,11 +16,13 @@
 - [x] Created test class for CommissionUtils to verify calculations
 - [x] Updated memory bank with waiter commission feature details
 - [x] Added recall, modify, merge and split bill functionality
-- [x] Added Mpesa payment method alongside cash and card
-- [x] Created super waiter role with ability to confirm Mpesa payments
+- [x] Added Mpesa payment method alongside cash and card (removed other payment methods per requirements)
+- [x] Created super waiter role with ability to confirm Mpesa and card payments
 - [x] Added UI buttons for Recall, Modify, Merge in restaurant interface
-- [x] Implemented pending payment status for Mpesa transactions requiring confirmation
+- [x] Implemented pending payment status for Mpesa and card transactions requiring manager/super waiter confirmation
 - [x] Added locale properties for new features and buttons
+- [x] Limited payment methods to cash, mpesa, and card only as requested
+- [x] Card payments now require manager/super waiter approval (pending status)
 
 ## Current State
 - All features implemented and committed to repository

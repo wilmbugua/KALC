@@ -68,28 +68,10 @@ public class JPaymentSelectReceipt extends JPaymentSelect {
 
         addTabPayment(new JPaymentSelect.JPaymentCashCreator());
         addTabPayment(new JPaymentSelect.JPaymentMagcardCreator());
-        addTabPayment(new JPaymentSelect.JPaymentMagcardCustom1Creator());
-        addTabPayment(new JPaymentSelect.JPaymentMagcardCustom2Creator());
-        addTabPayment(new JPaymentSelect.JPaymentMagcardCustom3Creator());
-        addTabPayment(new JPaymentSelect.JPaymentMagcardCustom4Creator());
-        addTabPayment(new JPaymentSelect.JPaymentMagcardCustom5Creator());
-        addTabPayment(new JPaymentSelect.JPaymentChequeCreator());
-        addTabPayment(new JPaymentSelect.JPaymentPaperCreator());
         addTabPayment(new JPaymentSelect.JPaymentMpesaCreator()); // Added Mpesa payment option
 
-        addTabPayment(new JPaymentSelect.JPaymentFreeCreator());
-        if (customerext != null && customerext.getMaxDebt() != 0.00) {
-            addTabPayment(new JPaymentSelect.JPaymentDebtCreator());
-        }
-        addTabPayment(new JPaymentSelect.JPaymentBankCreator());
-        addTabPayment(new JPaymentSelect.JPaymentCustomCreator());
-
-        if (SystemProperty.LOYALTYENABLED && SystemProperty.LOYALTYTYPE.equals("earnx") && loyaltyCard != null) {
-            addTabPayment(new JPaymentSelect.JPaymentLoyaltyCreator());
-        }
-        if (SystemProperty.GIFTCARDSENABLED) {
-            addTabPayment(new JPaymentSelect.JPaymentGiftCardCreator());
-        }
+        // Card payments require manager/super waiter approval
+        // Only show basic magcard - custom card types handled by manager/super waiter
         setHeaderVisible(true);
     }
 
