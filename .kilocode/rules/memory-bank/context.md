@@ -7,12 +7,18 @@
 - [x] Bar commission: Tiered structure (1%-11% based on sales amount)
 - [x] Currency formatted as Ksh (Kenyan Shilling)
 - [x] Added login.image.path property to kalcconfig.properties
-- [x] Modified LoginDialog to remove username field and use 8-digit PIN only
+- [x] Modified LoginDialog to remove username field and use 8-digit PIN only (fixed duplicate code)
 - [x] Added restaurant image display to login page loaded from kalcconfig.properties
 - [x] Created PropertyUtil utility class to read properties from kalcconfig.properties
-- [x] Updated JAlertPane.loginDialog() to return empty string for username (since not used)
-- [x] Created LoginSettingsDialog for admin to configure restaurant image path
-- [x] Fixed AppConfig.getProperty() to return actual property values
+- [x] Fixed LoginSettingsDialog to actually save logo path via AppConfig
+- [x] Completely redesigned login page: PIN keypad (numeric 0-9, Clear, Enter) on right side
+- [x] Added digital clock display on left side of login page (updates every 250ms)
+- [x] Restaurant logo configurable via admin panel and displayed on login page
+- [x] Modified JRootApp to use new PIN-only login UI (removed old user list login)
+- [x] Added findPeopleByPIN method in DataLogicSystem for PIN lookup (reuses apppassword column as PIN hash)
+- [x] Fixed PropertyUtils.getDBPassword to return actual password from properties (was placeholder)
+- [x] Fixed empty catch blocks in hardware scale and scanner classes (ScaleSamsungEsp, ScaleCasioPD1, ScaleComm, ScaleCASPDII, DeviceScannerComm) to printStackTrace
+- [x] Fixed ConnectionPoolFactory.getConnection to throw RuntimeException instead of returning null on error
 - [x] Created test class for CommissionUtils to verify calculations
 - [x] Updated memory bank with waiter commission feature details
 - [x] Added recall, modify, merge and split bill functionality
@@ -27,12 +33,11 @@
 
 ## Current State
 - All features implemented and committed to repository
-- Login page uses 8 PIN authentication without username
-- Restaurant image display configurable via admin panel
-- Waiter commission feature available as utility class
-- Mpesa payment method added alongside cash and card
-- Super waiter role can confirm pending Mpesa payments
-- Restaurant interface has Recall, Modify, Merge, Split bill buttons
-- Repository is clean with all changes committed locally
-- Images updated to KALC POS branding
-- Ready for integration into sales reporting or other modules as needed
+- Login page uses 8-digit PIN authentication without username, featuring numeric keypad (right) and digital clock + restaurant logo (left)
+- Logo path configurable via admin Login Settings dialog, saved in kalcconfig.properties
+- PIN hashing uses SHA-1 via Hashcypher; PIN stored in apppassword column
+- DataLogicSystem provides findPeopleByPIN for user lookup
+- Fixed critical bugs: PropertyUtils DB password retrieval, empty catch blocks, connection pool error handling
+- Waiter commission feature, Mpesa payments, super waiter role, bill management all functional
+- Repository is clean with all changes committed
+- Ready for production use
