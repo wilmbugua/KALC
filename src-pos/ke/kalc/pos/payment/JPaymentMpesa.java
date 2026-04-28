@@ -23,6 +23,7 @@ import ke.kalc.pos.customers.CustomerInfoExt;
 import ke.kalc.pos.forms.AppLocal;
 import ke.kalc.pos.forms.AppView;
 import ke.kalc.pos.forms.KALCFonts;
+import ke.kalc.pos.loyalty.LoyaltyCard;
 
 /**
  * Mpesa Payment Implementation
