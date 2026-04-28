@@ -113,20 +113,16 @@ public class LoginSettingsDialog extends JDialog {
             // Save the image path
             String path = imagePathField.getText().trim();
             if (!path.isEmpty()) {
-                // In a real app, we would save this to kalcconfig.properties
-                // For now, we'll just validate and show status
                 File imageFile = new File(path);
                 if (imageFile.exists()) {
                     statusField.setText(AppLocal.getIntString("message.savedvalid") + ": " + path);
                     statusField.setForeground(Color.GREEN);
-                    // Actually save to properties
-                    // AppConfig.put("login.image.path", path);
                 } else {
                     statusField.setText(AppLocal.getIntString("message.savednotfound") + ": " + path);
                     statusField.setForeground(Color.ORANGE);
-                    // Still save the path even if file doesn't exist yet
-                    // AppConfig.put("login.image.path", path);
                 }
+                // Save to properties using AppConfig
+                AppConfig.put("login.image.path", path);
             } else {
                 statusField.setText(AppLocal.getIntString("message.emptypath"));
                 statusField.setForeground(Color.RED);

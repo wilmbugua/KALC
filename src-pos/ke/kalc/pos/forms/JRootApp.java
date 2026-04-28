@@ -48,9 +48,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ImageIcon;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import net.miginfocom.swing.MigLayout;
 import ke.kalc.globals.SystemProperty;
 import ke.kalc.basic.BasicException;
@@ -70,7 +74,8 @@ import ke.kalc.pos.scale.DeviceScale;
 import ke.kalc.pos.scanpal2.DeviceScanner;
 import ke.kalc.pos.scanpal2.DeviceScannerFactory;
 import ke.kalc.data.loader.SessionFactory;
-import ke.kalc.pos.util.Hashcypher;
+ import ke.kalc.pos.util.Hashcypher;
+ import ke.kalc.pos.util.PropertyUtil;
 
 public class JRootApp extends JPanel implements AppView {
 
@@ -97,6 +102,8 @@ public class JRootApp extends JPanel implements AppView {
 
     private String m_clock;
     private String m_date;
+    private JLabel m_loginClockLabel;
+    private JLabel m_loginLogoLabel;
 
     static {
         m_oldclasses = new HashMap<>();
@@ -109,6 +116,9 @@ public class JRootApp extends JPanel implements AppView {
             m_clock = getLineTimer();
             m_date = getLineDate();
             jClock.setText("     " + m_date + "  " + m_clock);
+            if (m_loginClockLabel != null) {
+                m_loginClockLabel.setText(m_date + "\n" + m_clock);
+            }
         }
     }
 
@@ -128,14 +138,12 @@ public class JRootApp extends JPanel implements AppView {
         m_aBeanFactories = new HashMap<>();
         initComponents();
 
-        if (SystemProperty.NEWLOGIN) {
-            m_jPanelContainer.remove(m_jPanelLogin);
-            m_jPanelContainer.revalidate();
-            m_jPanelContainer.repaint();
-            buildLogin();
-        } else {
-            jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(30, 30));
-        }
+        // Always use PIN-only login UI
+        m_jPanelContainer.remove(m_jPanelLogin);
+        m_jPanelContainer.revalidate();
+        m_jPanelContainer.repaint();
+        buildLogin();
+
         thisInstance = this;
     }
    
@@ -160,78 +168,133 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private void buildLogin() {
-        JPanel loginPanel = new JPanel(new MigLayout("insets 0 0 0 0, align center", "[center]", "0[]5[250:250:250]30[]0"));
-        JLabel KALCText = new JLabel();
-        JButton loginBtn = new JButton();
-        JButton exitBtn = new JButton();
+        // Remove the old login panel if present
+        if (m_jPanelLogin != null) {
+            m_jPanelContainer.remove(m_jPanelLogin);
+        }
 
-     //   logoLabel.setIcon(scaleImage(SystemProperty.STARTLOGO, 1024, 350));
+        // Main login panel
+        JPanel loginPanel = new JPanel();
+        loginPanel.setLayout(new BorderLayout(20, 20));
+        loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        KALCText.setText("<html><center><b>KALC POS - Professional Point of Sale</b><br>"
-                + "Copyright \u00A9 2015 - 2023 KALC <br>"
-                + "http://www.KALC.co.uk<br>"
-                + "<br>"
-                + "KALC POS is proprietary commercial software. All rights reserved.<br>"
-                + "<br>"
-                + "Use of this software is subject to the KALC POS License Agreement.<br>"
-                + "</center>");
-        KALCText.setPreferredSize(new java.awt.Dimension(800, 300));
-        KALCText.setFont(KALCFonts.DEFAULTFONT.deriveFont(14f));
+        // LEFT PANEL: Digital clock + restaurant logo
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        m_loginClockLabel = new JLabel("", SwingConstants.CENTER);
+        m_loginClockLabel.setFont(KALCFonts.DEFAULTFONTBOLD.deriveFont(28f));
+        leftPanel.add(m_loginClockLabel);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+
+        // Restaurant logo from admin configuration
+        String imagePath = PropertyUtil.getProperty("login.image.path");
+        if (imagePath != null && !imagePath.isEmpty()) {
+            try {
+                File imageFile = new File(imagePath);
+                if (imageFile.exists()) {
+                    ImageIcon icon = new ImageIcon(ImageIO.read(imageFile));
+                    Image scaled = icon.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+                    m_loginLogoLabel = new JLabel(new ImageIcon(scaled));
+                    leftPanel.add(m_loginLogoLabel);
+                } else {
+                    JLabel fallback = new JLabel("Restaurant Logo");
+                    fallback.setFont(KALCFonts.DEFAULTFONT.deriveFont(18f));
+                    fallback.setHorizontalAlignment(SwingConstants.CENTER);
+                    leftPanel.add(fallback);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            JLabel fallback = new JLabel("Restaurant Logo");
+            fallback.setFont(KALCFonts.DEFAULTFONT.deriveFont(18f));
+            fallback.setHorizontalAlignment(SwingConstants.CENTER);
+            leftPanel.add(fallback);
+        }
+
+        // RIGHT PANEL: PIN display and numeric keypad
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout(10, 10));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // PIN display
+        JTextField pinDisplay = new JTextField();
+        pinDisplay.setEditable(false);
+        pinDisplay.setHorizontalAlignment(JTextField.RIGHT);
+        pinDisplay.setFont(KALCFonts.DEFAULTFONT.deriveFont(48f));
+        pinDisplay.setPreferredSize(new Dimension(250, 80));
+        pinDisplay.setEchoChar('•');
+        rightPanel.add(pinDisplay, BorderLayout.NORTH);
+
+        // Numeric keypad
+        JPanel keypad = new JPanel(new GridLayout(4, 3, 12, 12));
+        String[] keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "OK"};
+        for (String key : keys) {
+            JButton btn = new JButton(key);
+            btn.setFont(KALCFonts.DEFAULTFONTBOLD.deriveFont(24f));
+            btn.setFocusPainted(false);
+            btn.addActionListener((ActionEvent e) -> {
+                String cmd = e.getActionCommand();
+                if (cmd.equals("C")) {
+                    pinDisplay.setText("");
+                } else if (cmd.equals("OK")) {
+                    String pin = pinDisplay.getText();
+                    if (pin.length() == 8) {
+                        String pinHash = Hashcypher.hashString(pin);
+                        try {
+                            AppUser user = m_dlSystem.findPeopleByPIN(pinHash);
+                            if (user != null) {
+                                terminal.loginUser(user);
+                                openAppView(user);
+                            } else {
+                                JAlertPane.messageBox(JAlertPane.WARNING, "Login Failed", "Invalid PIN", 16,
+                                        new Dimension(250, 120), JAlertPane.OK_OPTION);
+                                pinDisplay.setText("");
+                            }
+                        } catch (BasicException ex) {
+                            ex.printStackTrace();
+                            JAlertPane.messageBox(JAlertPane.ERROR, "Error", "Database error: " + ex.getMessage(), 16,
+                                    new Dimension(300, 150), JAlertPane.OK_OPTION);
+                        }
+                    } else {
+                        JAlertPane.messageBox(JAlertPane.WARNING, "PIN Required", "Please enter 8-digit PIN", 16,
+                                new Dimension(250, 120), JAlertPane.OK_OPTION);
+                    }
+                } else {
+                    if (pinDisplay.getText().length() < 8) {
+                        pinDisplay.setText(pinDisplay.getText() + key);
+                    }
+                }
+            });
+            keypad.add(btn);
+        }
+        rightPanel.add(keypad, BorderLayout.CENTER);
+
+        // Combine left and right
+        JPanel centerPanel = new JPanel(new BorderLayout(30, 30));
+        centerPanel.add(leftPanel, BorderLayout.WEST);
+        centerPanel.add(rightPanel, BorderLayout.CENTER);
+
+        // Exit button
+        JButton exitBtn = new JButton("Exit");
         exitBtn.setFont(KALCFonts.DEFAULTBUTTONFONT.deriveFont(20f));
-        exitBtn.setIcon(IconFactory.getIcon("exit.png"));
         exitBtn.setFocusPainted(false);
-        exitBtn.setFocusable(false);
-        exitBtn.setPreferredSize(new Dimension(250, 50));
-        exitBtn.setRequestFocusEnabled(false);
+        exitBtn.setPreferredSize(new Dimension(150, 50));
         exitBtn.addActionListener((ActionEvent evt) -> {
             m_jCloseActionPerformed(evt);
         });
 
-        loginBtn.setFont(KALCFonts.DEFAULTBUTTONFONT.deriveFont(20f));
-        loginBtn.setIcon(IconFactory.getIcon("enter.png"));
-        loginBtn.setFocusPainted(false);
-        loginBtn.setFocusable(false);
-        loginBtn.setPreferredSize(new Dimension(250, 50));
-        loginBtn.setRequestFocusEnabled(false);
-        loginBtn.addActionListener((ActionEvent evt) -> {
-            Object[] result = JAlertPane.loginDialog();
-            if ((int) result[0] == 0) {
-                //check if card number supplied
-                AppUser m_actionuser = null;
-                try {
-                    m_actionuser = m_dlSystem.findPeopleByCard((String) result[1]);
-                    if (m_actionuser != null) {
-                        openAppView(m_actionuser);
-                        return;
-                    }
-                } catch (BasicException e) {
-                }
+        // Assemble loginPanel
+        loginPanel.add(centerPanel, BorderLayout.CENTER);
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(exitBtn);
+        loginPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-                try {
-                    m_actionuser = m_dlSystem.findPeopleByName((String) result[1]);
-
-                    if (m_actionuser != null && !((String) result[2]).isBlank()) {
-                        if (Hashcypher.authenticate((String) result[2], m_actionuser.getPassword())) {
-                            terminal.loginUser(m_actionuser);
-                            openAppView(m_actionuser);
-                            return;
-                        }
-                    }
-                } catch (BasicException ex) {
-                    Logger.getLogger(JRootApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                JAlertPane.messageBox(JAlertPane.WARNING, AppLocal.getIntString("message.unabletologin"), 14,
-                        new Dimension(100, 50), JAlertPane.OK_OPTION);
-            }
-        });
-
-        loginPanel.add("wrap", new JLabel(scaleImage(SystemProperty.STARTLOGO, 1024, 350)));
-        loginPanel.add("wrap", KALCText);
-        loginPanel.add("split 2, gapright 45", loginBtn);
-        loginPanel.add(exitBtn);
-
-        m_jPanelContainer.add(loginPanel);
+        // Replace old login card with new one
+        m_jPanelContainer.remove(m_jPanelLogin);
+        m_jPanelContainer.add(loginPanel, "login");
     }
 
     public static final int INIT_SUCCESS = 0;

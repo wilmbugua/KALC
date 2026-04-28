@@ -74,6 +74,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     protected SerializerRead peopleRead;
     protected SentenceList peopleVisible;
     protected SentenceList waiterList;
+    protected SentenceFind peopleByPIN;
     protected SentenceFind rolePermissions;
     protected SentenceFind resourceBytes;
     protected SentenceFind sequenceCash;
@@ -149,6 +150,8 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                         new ImageIcon(tnb.getThumbNail(ImageUtils.readImage(dr.getBytes(6)))));
             }
         };
+
+        peopleByPIN = new PreparedSentence(s, "select id, name, apppassword, card, role, image from people where apppassword = ? and visible = true and iswaiter = false", SerializerWriteString.INSTANCE, peopleRead);
 
         peopleVisible = new StaticSentence(s, "select id, name, apppassword, card, role, image from people p join siteguid s on p.siteguid = s.guid where s.guid = p.siteguid and visible = true and iswaiter = false  order by name", null, peopleRead);
 
@@ -265,6 +268,10 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                 + " where name = ? and visible = true and iswaiter = false ",
                 SerializerWriteString.INSTANCE,
                 AppUser.getSerializerRead()).find(userName);
+    }
+
+    public final AppUser findPeopleByPIN(String pinHash) throws BasicException {
+        return (AppUser) peopleByPIN.find(pinHash);
     }
 
     public final String findRolePermissions(String sRole, String guid) {
