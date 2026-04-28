@@ -1,6 +1,6 @@
 #!/bin/bash
 # KALC POS Build Script
-# Usage: ./build-kalc.sh (Linux/macOS) or run in Git Bash on Windows
+# Works on Linux, macOS, and Windows (Git Bash)
 
 set -e
 
@@ -14,18 +14,20 @@ if ! command -v javac &> /dev/null; then
     exit 1
 fi
 
-# Create output directory
+# Clean previous build
+rm -rf bin
 mkdir -p bin
 echo "✓ Created bin/ directory"
 
-# Build classpath from all JARs in lib/
-CP="bin"
-JAR_COUNT=0
-for jar in lib/*.jar; do
-    CP="$CP:$jar"
-    JAR_COUNT=$((JAR_COUNT + 1))
-done
-echo "✓ Classpath built with $JAR_COUNT JARs"
+# Determine classpath separator based on OS
+case "$(uname -s)" in
+    MINGW*|CYGWIN*|MSYS*) SEP=';' ;;
+    *) SEP=':' ;;
+esac
+
+# Build classpath using Java's wildcard expansion
+CP="bin${SEP}lib/*"
+echo "✓ Using classpath separator: $SEP"
 
 # Find all Java source files
 echo "Scanning source files..."
@@ -36,7 +38,7 @@ echo "✓ Found $SOURCE_COUNT Java source files"
 # Compile
 echo ""
 echo "Compiling..."
-javac -encoding UTF-8 -cp "$CP" -d bin @sources.txt 2>&1 | tee compile.log
+javac -encoding UTF-8 -d bin -cp "$CP" @sources.txt 2>&1 | tee compile.log
 
 if [ ${PIPESTATUS[0]} -eq 0 ]; then
     echo ""
@@ -53,13 +55,10 @@ echo "Creating kalc.jar..."
 jar cvf kalc.jar -C bin . > /dev/null
 echo "✓ kalc.jar created successfully"
 
-# Summary
 echo ""
-echo "=== Build Summary ==="
-echo "Output: kalc.jar"
-echo "Classes: $(find bin -name "*.class" | wc -l) .class files"
+echo "=== Build Complete ==="
+echo "Run:"
+echo "  java -cp \"kalc.jar${SEP}lib/*\" ke.kalc.pos.forms.StartPOS"
 echo ""
-echo "To run:"
-echo "  java -cp \"kalc.jar:lib/*\" ke.kalc.pos.forms.StartPOS"
+echo "Or double-click: kalc.jar (if associated with Java)"
 echo ""
-echo "Build Complete!"
