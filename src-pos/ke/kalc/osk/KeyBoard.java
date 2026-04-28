@@ -333,18 +333,18 @@ public class KeyBoard {
         events.put("Tab", new Integer[]{KeyEvent.VK_TAB});
         events.put("Enter", new Integer[]{KeyEvent.VK_ENTER});
         events.put("Caps", new Integer[]{KeyEvent.VK_CAPS_LOCK});
-        events.put("\u20AC", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_4});  // Euro sign
-        events.put("\u00E1", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_A}); // á
-        events.put("\u00C1", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_A}); // Á
-        events.put("\u00E9", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_E}); // é
-        events.put("\u00C9", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_E}); // É
-        events.put("\u00ED", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_I}); // í
-        events.put("\u00CD", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_I}); // Í
-        events.put("\u00FA", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_U}); // ú
-        events.put("\u00DA", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_U}); // Ú
-        events.put("\u00A6", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_BACK_QUOTE}); // ¦
-        events.put("\u00F3", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_O}); // ó
-        events.put("\u00D3", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_O}); // Ó
+        events.put("\u20AC", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_4});  // Euro
+        events.put("\u00E1", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_A}); // a-acute
+        events.put("\u00C1", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_A}); // A-acute
+        events.put("\u00E9", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_E}); // e-acute
+        events.put("\u00C9", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_E}); // E-acute
+        events.put("\u00ED", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_I}); // i-acute
+        events.put("\u00CD", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_I}); // I-acute
+        events.put("\u00FA", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_U}); // u-acute
+        events.put("\u00DA", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_U}); // U-acute
+        events.put("\u00A6", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_BACK_QUOTE}); // broken bar
+        events.put("\u00F3", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_O}); // o-acute
+        events.put("\u00D3", new Integer[]{KeyEvent.VK_ALT_GRAPH, KeyEvent.VK_SHIFT, KeyEvent.VK_O}); // O-acute
     }
 
     private void mapAltGr() {
