@@ -225,7 +225,7 @@ public class JRootApp extends JPanel implements AppView {
         pinDisplay.setHorizontalAlignment(JTextField.RIGHT);
         pinDisplay.setFont(KALCFonts.DEFAULTFONT.deriveFont(48f));
         pinDisplay.setPreferredSize(new Dimension(250, 80));
-        pinDisplay.setEchoChar('•');
+        pinDisplay.setEchoChar('\u2022');  // Bullet character •
         rightPanel.add(pinDisplay, BorderLayout.NORTH);
 
         // Numeric keypad

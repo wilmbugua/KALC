@@ -126,8 +126,8 @@ public class JAlertPane extends JDialog {
         return new Object[]{jAlert.getChoice(), jAlert.getDeliveryInfo()};
     }
 
-    public static Object[] auxilaryItemSelector(List<ProductInfoExt> productsม, Boolean pricevisible, Boolean taxesincluded) {
-        AuxiliaryItems jAlert = new AuxiliaryItems(productsม, pricevisible, taxesincluded);
+     public static Object[] auxilaryItemSelector(List<ProductInfoExt> products, Boolean pricevisible, Boolean taxesincluded) {
+         AuxiliaryItems jAlert = new AuxiliaryItems(products, pricevisible, taxesincluded);
         int x = JRootFrame.PARENTFRAME.getX() + ((JRootFrame.PARENTFRAME.getWidth() - jAlert.getWidth()) / 2);
         int y = JRootFrame.PARENTFRAME.getY() + 50;
         jAlert.setLocation(x, y);
