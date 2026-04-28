@@ -30,6 +30,10 @@
 - [x] Limited payment methods to cash, mpesa, and card only as requested
 - [x] Card payments now require manager/super waiter approval (pending status)
 - [x] Updated all images in src-beans/ke/kalc/fixedimages/ to KALC POS branding (replaced existing image files with new branded images)
+- [x] SECURITY: Fixed SQL injection in DataLogicSystem.getNoSales() by using PreparedSentence with parameter binding
+- [x] SECURITY: Added XXE protection to IncludeFile.java XML parser (disallow DOCTYPE, external entities, secure processing)
+- [x] SECURITY: Added path traversal validation in IconFactory.cacheIconsFromZip() using canonical path checks
+- [x] SECURITY: PIN input already validated to exactly 8 digits in login UI
 
 ## Current State
 - All features implemented and committed to repository
