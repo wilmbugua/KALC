@@ -362,7 +362,9 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
                             }                                                             
                         }
                     }
-                } catch (IOException eIO) {}
+                } catch (IOException eIO) {
+                    eIO.printStackTrace();
+                }
                 break;
         }
     }

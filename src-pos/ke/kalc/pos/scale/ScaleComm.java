@@ -169,7 +169,9 @@ public class ScaleComm implements Scale, SerialPortEventListener {
                         }
                     }
 
-                } catch (IOException eIO) {}
+                } catch (IOException eIO) {
+                    eIO.printStackTrace();
+                }
                 break;
         }
 

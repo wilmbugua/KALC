@@ -80,9 +80,8 @@ public class ConnectionPoolFactory {
             System.err.println();
             return comboPooledDataSource.getConnection();
         } catch (SQLException ex) {
-            System.out.println(ex);
+            throw new RuntimeException("Failed to get database connection from pool", ex);
         }
-        return null;
     }
 
 }

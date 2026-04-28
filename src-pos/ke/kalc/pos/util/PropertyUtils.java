@@ -98,7 +98,6 @@ public class PropertyUtils {
      * @return
      */
     public String getDBPassword() {
-        String m_password = "[color=#FF0000]YourDBPassword[/color]";
-        return m_password;
+        return m_propsconfig.getProperty("db.password");
     }
 }

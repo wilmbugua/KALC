@@ -163,7 +163,9 @@ public class ScaleCASPDII implements Scale, SerialPortEventListener {
                         }
                     }
 
-                } catch (IOException eIO) {}
+                } catch (IOException eIO) {
+                    eIO.printStackTrace();
+                }
                 break;
         }
     }       

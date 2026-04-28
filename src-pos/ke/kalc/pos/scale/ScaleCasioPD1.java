@@ -197,7 +197,9 @@ public class ScaleCasioPD1 implements Scale, SerialPortEventListener {
                     m_iStatusScale = SCALE_READY;
                     }
             }
-                    } catch (IOException eIO) {}
+                    } catch (IOException eIO) {
+                        eIO.printStackTrace();
+                    }
                 break;
                 }
         }
