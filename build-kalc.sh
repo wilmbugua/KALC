@@ -34,7 +34,7 @@ echo "✓ Found $SOURCE_COUNT Java source files"
 # Compile
 echo ""
 echo "Compiling..."
-javac -cp "$CP" -d bin @sources.txt 2>&1 | tee compile.log
+javac -encoding UTF-8 -cp "$CP" -d bin @sources.txt 2>&1 | tee compile.log
 
 if [ ${PIPESTATUS[0]} -eq 0 ]; then
     echo ""
