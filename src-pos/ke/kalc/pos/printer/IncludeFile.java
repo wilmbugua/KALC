@@ -55,6 +55,14 @@ public class IncludeFile {
     public String processInclude() {
         try {
             factory = DocumentBuilderFactory.newInstance();
+            // XXE Protection
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            factory.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
+            
             builder = factory.newDocumentBuilder();
             doc = builder.parse(new InputSource(new StringReader(inputBuilder.toString())));
             nodes = doc.getElementsByTagName("include");

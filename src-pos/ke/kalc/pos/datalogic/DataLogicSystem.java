@@ -320,8 +320,9 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     public final Integer getNoSales(String dateString) {
         Integer count;
         try {
-            count = (Integer) new StaticSentence(s, "select count(*) from draweropened where ticketid = 'No Sale' and opendate > {fn TIMESTAMP('" + dateString + "')}",
-                    null, SerializerReadInteger.INSTANCE).find();
+            count = (Integer) new PreparedSentence(s, 
+                    "select count(*) from draweropened where ticketid = 'No Sale' and opendate > {fn TIMESTAMP(?)}",
+                    SerializerWriteString.INSTANCE, SerializerReadInteger.INSTANCE).find(dateString);
         } catch (BasicException ex) {
             return 0;
         }

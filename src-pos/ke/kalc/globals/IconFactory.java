@@ -226,10 +226,24 @@ public class IconFactory {
         String currentPath;
         currentPath = System.getProperty("user.dir");
         ByteArrayOutputStream out;
-        FileInputStream fis;        
+        FileInputStream fis;
+        
+        // Validate zipFileName to prevent path traversal
+        if (zipFileName == null || zipFileName.contains("..")) {
+            System.err.println("Invalid zip file name: " + zipFileName);
+            return;
+        }
         
         try {
-            fis = new FileInputStream(currentPath + "/" + zipFileName);
+            File file = new File(currentPath + "/" + zipFileName);
+            // Ensure the resolved path is within the expected directory
+            String canonicalUserDir = new File(currentPath).getCanonicalPath();
+            String canonicalPath = file.getCanonicalPath();
+            if (!canonicalPath.startsWith(canonicalUserDir + File.separator)) {
+                System.err.println("Path traversal attempt detected: " + zipFileName);
+                return;
+            }
+            fis = new FileInputStream(file);
             try (
                      ZipInputStream zis = new ZipInputStream(fis)) {
                 ZipEntry ze = zis.getNextEntry();
