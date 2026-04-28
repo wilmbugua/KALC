@@ -702,15 +702,9 @@ public class JRootApp extends JPanel implements AppView {
 
         printerStart();
 
-        // keyboard listener activation
+        // Reset old input handler (not used for PIN entry)
         inputtext = new StringBuilder();
-        m_txtKeys.setText(null);
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                m_txtKeys.requestFocus();
-            }
-        });
+        // m_txtKeys hidden field no longer needed
     }
 
     private void processKey(char c) {
