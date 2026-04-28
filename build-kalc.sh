@@ -20,10 +20,12 @@ echo "✓ Created bin/ directory"
 
 # Build classpath from all JARs in lib/
 CP="bin"
+JAR_COUNT=0
 for jar in lib/*.jar; do
     CP="$CP:$jar"
+    JAR_COUNT=$((JAR_COUNT + 1))
 done
-echo "✓ Classpath built with ${#lib} JARs"
+echo "✓ Classpath built with $JAR_COUNT JARs"
 
 # Find all Java source files
 echo "Scanning source files..."
