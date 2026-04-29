@@ -1,0 +1,120 @@
+# KALC POS Configuration Template
+# Copy to kalcconfig.properties and customize for your environment
+# DO NOT commit kalcconfig.properties to version control
+
+# ===============================================
+# DATABASE CONFIGURATION
+# ===============================================
+
+# Database connection user
+database.user = eposuser
+
+# Database password (encrypted)
+# To generate encrypted password, use KALC admin tool
+database.password = crypt:0B1F6EBBC0C0D5F5
+
+# Database server hostname or IP
+database.server = localhost
+
+# Database server port
+database.port = 3306
+
+# Database name
+database.name = KALCpos
+
+# MySQL Connector library path
+database.library = /lib/mysql-connector-java-8.0.23.jar
+
+# JDBC Driver class
+database.class = com.mysql.cj.jdbc.Driver
+
+# ===============================================
+# RECEIPT PAPER SETTINGS
+# ===============================================
+
+# Receipt paper left margin (mm)
+paper.receipt.x = 10
+
+# Receipt paper top margin (mm)
+paper.receipt.y = 10
+
+# Receipt paper width (mm)
+paper.receipt.width = 190
+
+# Receipt paper height (mm)
+paper.receipt.height = 546
+
+# Receipt paper media size name
+paper.receipt.mediasizename = A4
+
+# ===============================================
+# STANDARD PAPER SETTINGS
+# ===============================================
+
+# Standard paper left margin
+paper.standard.x = 72
+
+# Standard paper top margin
+paper.standard.y = 72
+
+# Standard paper width
+paper.standard.width = 451
+
+# Standard paper height
+paper.standard.height = 698
+
+# Standard paper media size name
+paper.standard.mediasizename = A4
+
+# ===============================================
+# DISPLAY SETTINGS
+# ===============================================
+
+# Receipt display columns
+screen.receipt.columns = 42
+
+# POS window width (pixels)
+POSwidth = 1024
+
+# POS window height (pixels)
+POSheight = 768
+
+# POS window X position (pixels)
+POSx = 327
+
+# POS window Y position (pixels)
+POSy = 252
+
+# ===============================================
+# APPLICATION SETTINGS
+# ===============================================
+
+# Terminal/Device ID (unique identifier for this POS)
+terminalID = DESKTOP-DEFAULT
+
+# Last ticket number (for recovery)
+lastticket.number = 1
+
+# Last ticket type
+lastticket.type = 0
+
+# Application version (internal number)
+application.versionint = 251604
+
+# Application version (display string)
+application.version = 1.5.5 - 251604
+
+# Application width
+width = 1919
+
+# Shared ticket with current user
+sharedticket.currentuser = true
+
+# Remove admin checks (use with caution)
+removeadmincheck = true
+
+# Last import folder
+import.lastfolder = ./
+
+# Login image path (leave empty for default)
+login.image.path =
