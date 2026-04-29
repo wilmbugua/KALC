@@ -1,7 +1,7 @@
 ﻿General Public License
 
 This file is part of KALC oPOS
-http://www.KALC.co.uk
+http://www.kalc.co.ke
 
 This license file applies to the KALC POS software 
 (the "KALC POS Software"), except as described in B) and C) below.

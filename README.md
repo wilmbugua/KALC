@@ -177,7 +177,7 @@ KALC POS is proprietary software. See the [LICENSE](LICENSE) file for details.
 
 ## Credits
 
-Originally forked from the Chromis POS project, KALC POS has been extensively rebranded, modified, and maintained as an independent POS solution. KALC POS is not affiliated with the original Chromis or Openbravo projects.
+KALC POS - A professional point of sale solution, extensively developed and maintained as an independent POS system.
 
 ---
 

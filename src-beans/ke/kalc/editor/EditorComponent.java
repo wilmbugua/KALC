@@ -3,8 +3,8 @@
 **
 **    Copyright (c)2015-2021
 **    
-**    KALC and previous contributing parties (Unicenta & Openbravo)
-**    http://www.KALC.co.uk
+**    KALC and previous contributing parties
+**    http://www.kalc.co.ke
 **
 **    This file is part of KALC POS Version KALC V1.4.0
 **    

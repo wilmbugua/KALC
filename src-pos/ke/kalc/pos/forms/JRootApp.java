@@ -3,9 +3,9 @@
 **
 **    This file is part of KALC POS Version KALC V1.5.4
 **
-**    Copyright (c) 2015-2023 KALC & previous Openbravo POS related works   
+**    Copyright (c) 2015-2023 KALC & previous KALC POS related works   
 **
-**    https://www.KALC.co.uk
+**    https://www.kalc.co.ke
 **   
 **
  */
@@ -800,7 +800,7 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setIcon(IconFactory.getIcon("kalclogo.png"));
         jLabel1.setText("<html><center><b>KALC POS - Professional Point of Sale</b><br>"
             + "Copyright \u00A9 2015 - 2023 KALC <br>"
-            + "http://www.KALC.co.uk<br>"
+            + "http://www.kalc.co.ke<br>"
             + "<br>"
             + "KALC POS is proprietary commercial software. All rights reserved.<br>"
             + "<br>"

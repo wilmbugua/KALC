@@ -3,9 +3,9 @@
 **
 **    This file is part of KALC Administration Version KALC V1.5.4
 **
-**    Copyright (c) 2015-2022 KALC & previous Openbravo POS related works   
+**    Copyright (c) 2015-2022 KALC & previous KALC POS related works   
 **
-**    https://www.KALC.co.uk
+**    https://www.kalc.co.ke
 **   
 **
 */
