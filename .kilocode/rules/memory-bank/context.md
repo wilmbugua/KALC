@@ -5,6 +5,7 @@
 - [x] Created CommissionUtils utility class for calculating commissions
 - [x] Kitchen commission: Fixed 2% of food sales
 - [x] Bar commission: Tiered structure (1%-11% based on sales amount)
+- [x] Documented bar commission brackets explicitly in CommissionUtils Javadoc (0-100K:1%, 100K-200K:2%, ..., >1M:11%)
 - [x] Currency formatted as Ksh (Kenyan Shilling)
 - [x] Added login.image.path property to kalcconfig.properties
 - [x] Modified LoginDialog to remove username field and use 8-digit PIN only (fixed duplicate code)

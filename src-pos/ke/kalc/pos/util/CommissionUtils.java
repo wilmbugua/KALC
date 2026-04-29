@@ -13,7 +13,13 @@
 package ke.kalc.pos.util;
 
 /**
- * Utility class for calculating waiter commissions based on sales
+ * Utility class for calculating waiter commissions based on sales.
+ * <p>
+ * Commission rates (in Kenyan Shillings - KSH):
+ * <ul>
+ *   <li>Kitchen commission: fixed 2% of food sales</li>
+ *   <li>Bar commission: tiered structure based on bar sales amount</li>
+ * </ul>
  */
 public class CommissionUtils {
 
@@ -31,7 +37,18 @@ public class CommissionUtils {
     }
 
     /**
-     * Calculate bar commission based on tiered structure
+     * Calculate bar commission based on tiered structure:
+     *  - 0 - 100,000 KSH: 1%
+     *  - 100,001 - 200,000 KSH: 2%
+     *  - 200,001 - 300,000 KSH: 3%
+     *  - 300,001 - 400,000 KSH: 4%
+     *  - 400,001 - 500,000 KSH: 5%
+     *  - 500,001 - 600,000 KSH: 6%
+     *  - 600,001 - 700,000 KSH: 7%
+     *  - 700,001 - 800,000 KSH: 8%
+     *  - 800,001 - 900,000 KSH: 9%
+     *  - 900,001 - 1,000,000 KSH: 10%
+     *  - above 1,000,000 KSH: 11%
      * @param barSales Amount of bar sales
      * @return Bar commission amount
      */
