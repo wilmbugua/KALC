@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import ke.kalc.globals.SystemProperty;
 import ke.kalc.pos.customers.CustomerInfoExt;
 import ke.kalc.pos.inventory.TaxCategoryInfo;
 import ke.kalc.pos.ticket.TaxInfo;
@@ -105,11 +106,19 @@ public class TaxesLogic {
 //        ticket.setTaxes(tickettaxes);
 //    }
     /**
+     * Calculate taxes for the given ticket. If DISABLETAXES system property is true,
+     * no taxes will be calculated and an empty list will be set on the ticket.
      *
      * @param ticket
      * @throws TaxesException
      */
     public void calculateTaxes(TicketInfo ticket) throws TaxesException {
+
+        // If taxes are globally disabled, set empty tax list and return
+        if (SystemProperty.DISABLETAXES) {
+            ticket.setTaxes(new ArrayList<TicketTaxInfo>());
+            return;
+        }
 
         List<TicketTaxInfo> tickettaxes = new ArrayList<>();
         TicketTaxInfo[] taxes = ticket.getTaxLines();
@@ -261,6 +270,10 @@ public class TaxesLogic {
      */
     public double getTaxRate(TaxCategoryInfo tc, CustomerInfoExt customer) {
 
+        if (SystemProperty.DISABLETAXES) {
+            return 0.0;
+        }
+
         if (tc == null) {
             return 0.0;
         } else {
@@ -275,6 +288,10 @@ public class TaxesLogic {
      * @return
      */
     public double getTaxRate(String tcid, CustomerInfoExt customer) {
+
+        if (SystemProperty.DISABLETAXES) {
+            return 0.0;
+        }
 
         if (tcid == null) {
             return 0.0;
@@ -320,23 +337,20 @@ public class TaxesLogic {
      *
      * @param tcid
      * @param customer
-     * @return
+     * @return TaxInfo or null if not found; if DISABLETAXES is set, returns a dummy zero-rate tax
      */
     public TaxInfo getTaxInfo(String tcid, CustomerInfoExt customer) {
+
+        if (SystemProperty.DISABLETAXES) {
+            // Return a dummy zero-rate tax to avoid NPEs
+            return new TaxInfo("DISABLED", "Tax Disabled", null, null, null, 0.0, false, 0, false);
+        }
+
         TaxInfo defaulttax = null;
         for (TaxInfo tax : taxlist) {
-          //  if (tax.getTaxCategoryID() != null) {
-                if (tax.getTaxCategoryID() != null && tax.getTaxCategoryID().equals(tcid)) {
-                    return tax;
-                }
-
-//                if (tax.getTaxCategoryID() != null) {
-//                    if (tax.getTaxCategoryID().equals(tcid)) {
-//                        return tax;
-//                    }
-//                }
-         //   }
-
+            if (tax.getTaxCategoryID() != null && tax.getTaxCategoryID().equals(tcid)) {
+                return tax;
+            }
         }
         return defaulttax;
     }

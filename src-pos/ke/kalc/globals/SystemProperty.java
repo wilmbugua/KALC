@@ -45,6 +45,7 @@ public class SystemProperty {
     private static Session session;
     private static Boolean tabFound = false;
 
+    public static final Boolean DISABLETAXES;
     public static final Boolean AMOUNTATTOP;
     public static final Boolean AUTOLOGOFFAFTERKITCHEN;
     public static final Boolean AUTOLOGOFFAFTERPRINT;
@@ -196,6 +197,7 @@ public class SystemProperty {
         CATBYNUMBERORDER = getBoolean("CATBYNUMBERORDER");
         CHANGETAXOPTIONS = getBoolean("CHANGETAXOPTIONS");
         CLOSEDCASHBTN = getBoolean("CLOSEDCASHBTN");
+        DISABLETAXES = getBoolean("DISABLETAXES");
         COLOURTICKETLINES = getBoolean("COLOURTICKETLINES");
         CONSOLIDATED = getBoolean("CONSOLIDATED");
         CREATEORDER = getBoolean("CREATEORDER");

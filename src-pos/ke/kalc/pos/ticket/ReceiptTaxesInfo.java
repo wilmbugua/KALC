@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import ke.kalc.globals.SystemProperty;
 import ke.kalc.format.Formats;
 
 /**
@@ -45,7 +46,15 @@ public class ReceiptTaxesInfo {
         receiptTax = roundHalfEven(taxNett * taxRate);
     }
 
+    /**
+     * Returns list of tax lines for receipt. If DISABLETAXES is true, returns empty list.
+     */
     public List<ReceiptTaxesInfo> getReceiptTaxLines(List<LineTaxRates> linetaxes) {
+
+        // If taxes are globally disabled, return empty list to hide tax lines on receipts
+        if (SystemProperty.DISABLETAXES) {
+            return new ArrayList<>();
+        }
 
         Map<String, Double> receiptTaxLines = new HashMap<>();
         Map<String, Double> receiptTaxRates = new HashMap<>();

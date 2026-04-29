@@ -37,10 +37,11 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import ke.kalc.commons.utils.KeyedData;
-import ke.kalc.commons.utils.TerminalInfo;
-import ke.kalc.globals.Company;
-import ke.kalc.pos.forms.AppConfig;
+ import ke.kalc.commons.utils.KeyedData;
+ import ke.kalc.commons.utils.TerminalInfo;
+ import ke.kalc.globals.Company;
+ import ke.kalc.globals.SystemProperty;
+ import ke.kalc.pos.forms.AppConfig;
 import ke.kalc.pos.forms.AppLocal;
 import ke.kalc.pos.forms.BeanFactoryDataSingle;
 import ke.kalc.pos.loyalty.LoyaltyCard;
@@ -896,8 +897,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         }).list();
     }
 
-    public final TaxInfo getTaxByID(String id) throws BasicException {
-        return (TaxInfo) new PreparedSentence(s, "select "
+     public final TaxInfo getTaxByID(String id) throws BasicException {
+         // If tax collection is globally disabled, return a zero-rate dummy tax
+         if (ke.kalc.globals.SystemProperty.DISABLETAXES) {
+             return new TaxInfo("DISABLED", "Tax Disabled", null, null, null, 0.0, false, 0, false);
+         }
+         return (TaxInfo) new PreparedSentence(s, "select "
                 + "id, "
                 + "name, "
                 + "category, "
@@ -914,8 +919,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 TaxInfo.getSerializerRead()).find(id);
     }
 
-    public final TaxInfo getTaxByCategoryID(String id) throws BasicException {
-        return (TaxInfo) new PreparedSentence(s, "select "
+     public final TaxInfo getTaxByCategoryID(String id) throws BasicException {
+         // If tax collection is globally disabled, return a zero-rate dummy tax
+         if (ke.kalc.globals.SystemProperty.DISABLETAXES) {
+             return new TaxInfo("DISABLED", "Tax Disabled", null, null, null, 0.0, false, 0, false);
+         }
+         return (TaxInfo) new PreparedSentence(s, "select "
                 + "id, "
                 + "name, "
                 + "category, "
@@ -1406,7 +1415,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                     ticketlineinsert.exec(l);
 
-                    lineTaxRatesInsert.exec(new LineTaxRates(l, getTaxByID(l.getTaxInfo().getId())));
+                    // Only record tax details if tax collection is enabled
+                    if (!SystemProperty.DISABLETAXES) {
+                        lineTaxRatesInsert.exec(new LineTaxRates(l, getTaxByID(l.getTaxInfo().getId())));
+                    }
 
                     if (l.getProductID() != null & l.isProductService() != true
                             & l.getManageStock() == true || l.isRecipe() || l.getProductID().equalsIgnoreCase("DefaultProduct")) {

@@ -6,6 +6,13 @@
 - [x] Kitchen commission: Fixed 2% of food sales
 - [x] Bar commission: Tiered structure (1%-11% based on sales amount)
 - [x] Documented bar commission brackets explicitly in CommissionUtils Javadoc (0-100K:1%, 100K-200K:2%, ..., >1M:11%)
+- [x] Implemented global tax disable feature via DISABLETAXES system property
+- [x] Modified TaxesLogic.calculateTaxes() to set empty taxes list when DISABLETAXES=true
+- [x] Modified TaxesLogic.getTaxRate() methods to return 0 when DISABLETAXES=true
+- [x] Modified TaxesLogic.getTaxInfo() to return dummy zero-rate tax when DISABLETAXES=true
+- [x] Modified DataLogicSales.getTaxByID() and getTaxByCategoryID() to return dummy zero-rate tax when DISABLETAXES=true
+- [x] Modified DataLogicSales ticket save to skip linetaxrates insertion when DISABLETAXES=true
+- [x] Modified ReceiptTaxesInfo.getReceiptTaxLines() to return empty list when DISABLETAXES=true (no tax lines printed)
 - [x] Currency formatted as Ksh (Kenyan Shilling)
 - [x] Added login.image.path property to kalcconfig.properties
 - [x] Modified LoginDialog to remove username field and use 8-digit PIN only (fixed duplicate code)
