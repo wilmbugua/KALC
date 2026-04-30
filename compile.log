@@ -1,0 +1,92 @@
+src-pos/ke/kalc/pos/payment/JPaymentSelect.java:532: error: constructor JPaymentMpesa in class JPaymentMpesa cannot be applied to given types;
+            return new JPaymentMpesa(JPaymentSelect.this);
+                   ^
+  required: AppView,JPaymentNotifier
+  found: JPaymentSelect
+  reason: actual and formal argument lists differ in length
+src-pos/ke/kalc/pos/forms/JRootApp.java:178: error: cannot find symbol
+        loginPanel.setLayout(new BorderLayout(20, 20));
+                                 ^
+  symbol:   class BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:197: error: cannot find symbol
+                    ImageIcon icon = new ImageIcon(ImageIO.read(imageFile));
+                                                   ^
+  symbol:   variable ImageIO
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:219: error: cannot find symbol
+        rightPanel.setLayout(new BorderLayout(10, 10));
+                                 ^
+  symbol:   class BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:228: error: cannot find symbol
+        pinDisplay.setEchoChar('\u2022');  // Bullet character •
+                  ^
+  symbol:   method setEchoChar(char)
+  location: variable pinDisplay of type JTextField
+src-pos/ke/kalc/pos/forms/JRootApp.java:229: error: cannot find symbol
+        rightPanel.add(pinDisplay, BorderLayout.NORTH);
+                                   ^
+  symbol:   variable BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:232: error: cannot find symbol
+        JPanel keypad = new JPanel(new GridLayout(4, 3, 12, 12));
+                                       ^
+  symbol:   class GridLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:252: error: incompatible types: int cannot be converted to Dimension
+                                JAlertPane.messageBox(JAlertPane.WARNING, "Login Failed", "Invalid PIN", 16,
+                                                                ^
+src-pos/ke/kalc/pos/forms/JRootApp.java:258: error: incompatible types: int cannot be converted to Dimension
+                            JAlertPane.messageBox(JAlertPane.ERROR, "Error", "Database error: " + ex.getMessage(), 16,
+                                                            ^
+src-pos/ke/kalc/pos/forms/JRootApp.java:262: error: incompatible types: int cannot be converted to Dimension
+                        JAlertPane.messageBox(JAlertPane.WARNING, "PIN Required", "Please enter 8-digit PIN", 16,
+                                                        ^
+src-pos/ke/kalc/pos/forms/JRootApp.java:273: error: cannot find symbol
+        rightPanel.add(keypad, BorderLayout.CENTER);
+                               ^
+  symbol:   variable BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:276: error: cannot find symbol
+        JPanel centerPanel = new JPanel(new BorderLayout(30, 30));
+                                            ^
+  symbol:   class BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:277: error: cannot find symbol
+        centerPanel.add(leftPanel, BorderLayout.WEST);
+                                   ^
+  symbol:   variable BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:278: error: cannot find symbol
+        centerPanel.add(rightPanel, BorderLayout.CENTER);
+                                    ^
+  symbol:   variable BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:290: error: cannot find symbol
+        loginPanel.add(centerPanel, BorderLayout.CENTER);
+                                    ^
+  symbol:   variable BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/forms/JRootApp.java:293: error: cannot find symbol
+        loginPanel.add(bottomPanel, BorderLayout.SOUTH);
+                                    ^
+  symbol:   variable BorderLayout
+  location: class JRootApp
+src-pos/ke/kalc/pos/payment/JPaymentMpesa.java:70: error: constructor PaymentInfoCash_original in class PaymentInfoCash_original cannot be applied to given types;
+        PaymentInfoCash_original payinfo = new PaymentInfoCash_original();
+                                           ^
+  required: double,double
+  found: no arguments
+  reason: actual and formal argument lists differ in length
+src-pos/ke/kalc/pos/payment/JPaymentMpesa.java:71: error: cannot find symbol
+        payinfo.setTransactionID(transaction);
+               ^
+  symbol:   method setTransactionID(String)
+  location: variable payinfo of type PaymentInfoCash_original
+src-pos/ke/kalc/pos/payment/JPaymentMpesa.java:72: error: cannot find symbol
+        payinfo.setName("Mpesa");
+               ^
+  symbol:   method setName(String)
+  location: variable payinfo of type PaymentInfoCash_original
+src-pos/ke/kalc/pos/payment/JPaymentMpesa.java:73: error: cannot find symbol
