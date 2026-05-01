@@ -57,9 +57,9 @@ KALC POS is a comprehensive, production-ready point-of-sale system designed for 
 - Cash drawers (printer-driven or serial)
 - Magnetic stripe card readers
 
-## Quick Start
+## Installation
 
-### Installation
+### Option 1: Pre-built JAR (Easiest)
 
 1. **Download** the latest `kalc.jar` from the releases page
 
@@ -67,7 +67,7 @@ KALC POS is a comprehensive, production-ready point-of-sale system designed for 
    ```bash
    java -jar kalc.jar
    ```
-
+   
    Or on Windows, double-click the JAR file
 
 3. **First-time Setup** - The application will guide you through:
@@ -75,6 +75,10 @@ KALC POS is a comprehensive, production-ready point-of-sale system designed for 
    - Company information
    - Initial user accounts
    - Printer setup
+
+   A unique **Terminal ID** is automatically generated during first installation to identify this machine.
+
+### Option 2: Build from Source
 
 ### Default Login
 
