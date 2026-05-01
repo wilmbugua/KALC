@@ -37,7 +37,7 @@ KALC POS is a comprehensive, production-ready point-of-sale system designed for 
 ### Technical Features
 - **Database Support** - MySQL / PostgreSQL backends
 - **Multi-currency** - Support for multiple currencies and tax regimes
-- **Multi-terminal** - networked operations across multiplePOS stations
+- **Multi-terminal** - networked operations across multiple POS stations
 - **User Roles** - Granular permissions for staff (cashier, supervisor, manager, admin)
 - **Offline Mode** - Continue operations during network outages
 

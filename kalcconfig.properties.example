@@ -1,0 +1,40 @@
+# Example KALC POS Configuration File
+# Copy this file to kalcconfig.properties and customize for your environment
+# NEVER commit kalcconfig.properties to version control - it contains sensitive credentials
+
+database.user = your_database_username
+database.password = your_database_password
+database.server = localhost
+database.port = 3306
+database.name = KALCpos
+database.library = ./lib/mysql-connector-java-8.0.23.jar
+database.class = com.mysql.cj.jdbc.Driver
+
+# Printer and UI settings
+paper.receipt.x = 10
+paper.receipt.y = 10
+paper.receipt.width = 190
+paper.receipt.height = 546
+paper.receipt.mediasizename = A4
+paper.standard.x = 72
+paper.standard.y = 72
+paper.standard.width = 451
+paper.standard.height = 698
+paper.standard.mediasizename = A4
+screen.receipt.columns = 42
+terminalID = YOUR_TERMINAL_ID
+import.lastfolder = ./
+lastticket.number = 1
+lastticket.type = 0
+application.versionint = 251604
+application.version = 1.5.5 - 251604
+width=1919
+sharedticket.currentuser=true
+removeadmincheck=true
+POSwidth = 1024
+POSheight = 768
+POSx = 327
+POSy = 252
+
+# Login settings
+login.image.path =
