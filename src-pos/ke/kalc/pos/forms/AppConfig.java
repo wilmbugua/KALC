@@ -141,7 +141,7 @@ public class AppConfig implements AppProperties {
             AltEncrypter cypher = new AltEncrypter("cypherkey" + getDatabaseUser());
             return cypher.decrypt(sDBPassword.substring(6));
         }
-        return null;
+        return sDBPassword;
     }
 
     public static void setDatabasePassword(String password) {
