@@ -512,17 +512,27 @@ INSERT INTO SEQUENCE (NAME, LASTVALUE) VALUES ('sharedtickets', 0);
 -- 3. KALC-SPECIFIC TRIGGERS (Minimal Set)
 -- ============================================
 
--- Note: Triggers use custom delimiters to allow semicolons in body
-
 -- Trigger to protect payments from update (KALC requirement)
+-- Uses single-statement syntax to avoid delimiter issues
 DROP TRIGGER IF EXISTS update_payments;
-DELIMITER $$
 CREATE TRIGGER update_payments BEFORE UPDATE ON payments
 FOR EACH ROW
-BEGIN
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'UPDATE cancelled payments';
-END$$
-DELIMITER ;
+SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'UPDATE cancelled payments';
+
+-- Trigger: log ticketline inserts to stockdiary
+DROP TRIGGER IF EXISTS insert_ticketlines;
+CREATE TRIGGER insert_ticketlines AFTER INSERT ON ticketlines
+FOR EACH ROW
+INSERT INTO stockdiary (id, datenew, reason, location, product, attributesetinstance_id, units, price)
+VALUES (UUID(), NOW(), 1, '0', NEW.product, NEW.attributesetinstance_id, -NEW.units, NEW.price);
+
+-- Trigger: update stockcurrent after ticketline insert
+DROP TRIGGER IF EXISTS update_stockcurrent_insert;
+CREATE TRIGGER update_stockcurrent_insert AFTER INSERT ON ticketlines
+FOR EACH ROW
+INSERT INTO stockcurrent (location, product, attributesetinstance_id, units)
+VALUES ('0', NEW.product, NEW.attributesetinstance_id, -NEW.units)
+ON DUPLICATE KEY UPDATE units = units - NEW.units;
 
 -- Triggers for stock management (basic version)
 DROP TRIGGER IF EXISTS insert_ticketlines;
