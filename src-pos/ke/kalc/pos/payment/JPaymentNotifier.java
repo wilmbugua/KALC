@@ -22,4 +22,5 @@ public interface JPaymentNotifier {
      */
     public void setStatus(boolean isPositive, boolean isComplete);
     public void setDefaultBtn(boolean value);
+    public double getRemainingBalance();
 }

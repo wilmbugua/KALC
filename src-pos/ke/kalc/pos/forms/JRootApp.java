@@ -18,6 +18,8 @@ import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
@@ -44,11 +46,13 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -220,7 +224,7 @@ public class JRootApp extends JPanel implements AppView {
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // PIN display
-        JTextField pinDisplay = new JTextField();
+        JPasswordField pinDisplay = new JPasswordField();
         pinDisplay.setEditable(false);
         pinDisplay.setHorizontalAlignment(JTextField.RIGHT);
         pinDisplay.setFont(KALCFonts.DEFAULTFONT.deriveFont(48f));
@@ -249,17 +253,17 @@ public class JRootApp extends JPanel implements AppView {
                                 terminal.loginUser(user);
                                 openAppView(user);
                             } else {
-                                JAlertPane.messageBox(JAlertPane.WARNING, "Login Failed", "Invalid PIN", 16,
+                                JAlertPane.messageBox(JAlertPane.WARNING, "Login Failed\nInvalid PIN", 16,
                                         new Dimension(250, 120), JAlertPane.OK_OPTION);
                                 pinDisplay.setText("");
                             }
                         } catch (BasicException ex) {
                             ex.printStackTrace();
-                            JAlertPane.messageBox(JAlertPane.ERROR, "Error", "Database error: " + ex.getMessage(), 16,
+                            JAlertPane.messageBox(JAlertPane.ERROR, "Error\nDatabase error: " + ex.getMessage(), 16,
                                     new Dimension(300, 150), JAlertPane.OK_OPTION);
                         }
                     } else {
-                        JAlertPane.messageBox(JAlertPane.WARNING, "PIN Required", "Please enter 8-digit PIN", 16,
+                        JAlertPane.messageBox(JAlertPane.WARNING, "PIN Required\nPlease enter 8-digit PIN", 16,
                                 new Dimension(250, 120), JAlertPane.OK_OPTION);
                     }
                 } else {

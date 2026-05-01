@@ -24,6 +24,11 @@ import ke.kalc.pos.forms.AppLocal;
 import ke.kalc.pos.forms.AppView;
 import ke.kalc.pos.forms.KALCFonts;
 import ke.kalc.pos.loyalty.LoyaltyCard;
+import java.awt.Window;
+import javax.swing.SwingUtilities;
+import javax.swing.JRootPane;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 
 /**
  * Mpesa Payment Implementation
@@ -66,18 +71,10 @@ public class JPaymentMpesa extends javax.swing.JPanel implements JPaymentInterfa
             return null;
         }
         
-        // Create payment info
-        PaymentInfoCash_original payinfo = new PaymentInfoCash_original();
-        payinfo.setTransactionID(transaction);
-        payinfo.setName("Mpesa");
-        payinfo.setPayeeName(transactionCode); // Store Mpesa code in payee name
-        
-        // For Mpesa, we consider it as paid when transaction code is entered
-        payinfo.setTendered(Double.parseDouble(m_notifier.getRemainingBalance()));
-        payinfo.setTotal(Double.parseDouble(m_notifier.getRemainingBalance()));
-        
+        // Create payment info for full amount
+        double amount = m_notifier.getRemainingBalance();
         m_notifier.setStatus(true, true); // Success
-        return payinfo;
+        return new PaymentInfoCash_original(amount, amount);
     }
 
     @Override
@@ -113,20 +110,13 @@ public class JPaymentMpesa extends javax.swing.JPanel implements JPaymentInterfa
         add(jlblMessage, BorderLayout.CENTER);
 
         // Add Enter key listener to process payment
-        m_jTransactionCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // Trigger OK button in parent dialog
-                java.awt.Window[] windows = java.awt.Window.getWindows();
-                for (java.awt.Window window : windows) {
-                    if (window instanceof java.awt.Dialog && window.isShowing()) {
-                        java.awt.Button[] buttons = ((java.awt.Dialog) window).getButtons();
-                        for (java.awt.Button button : buttons) {
-                            if ("OK".equals(button.getLabel())) {
-                                button.dispatchEvent(new java.awt.event.ActionEvent(button, java.awt.event.ActionEvent.ACTION_PERFORMED, ""));
-                                break;
-                            }
-                        }
-                    }
+        m_jTransactionCode.addActionListener(e -> {
+            java.awt.Window window = SwingUtilities.getWindowAncestor(JPaymentMpesa.this);
+            if (window instanceof javax.swing.JDialog) {
+                javax.swing.JRootPane rp = ((javax.swing.JDialog) window).getRootPane();
+                javax.swing.JButton defaultButton = rp.getDefaultButton();
+                if (defaultButton != null) {
+                    defaultButton.doClick();
                 }
             }
         });

@@ -24,6 +24,8 @@ import ke.kalc.custom.ExtendedJButton;
 import ke.kalc.pos.forms.AppLocal;
 import ke.kalc.pos.forms.KALCFonts;
 import ke.kalc.pos.util.PropertyUtil;
+import net.miginfocom.swing.MigLayout;
+import ke.kalc.commons.dialogs.JAlertPane;
 
 /**
  * Dialog for configuring login settings

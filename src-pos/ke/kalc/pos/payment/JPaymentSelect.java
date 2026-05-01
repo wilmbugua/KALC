@@ -529,7 +529,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog implements JPay
 
         @Override
         public JPaymentInterface createJPayment() {
-            return new JPaymentMpesa(JPaymentSelect.this);
+            return new JPaymentMpesa(app, JPaymentSelect.this);
         }
 
         @Override
@@ -898,6 +898,10 @@ public abstract class JPaymentSelect extends javax.swing.JDialog implements JPay
 
     public void setReceiptRequired(Boolean required) {
         printReceipt = required;
+    }
+
+    public double getRemainingBalance() {
+        return balance;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
