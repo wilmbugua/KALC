@@ -23,6 +23,9 @@ sources.txt
 *.swp
 *.swo
 *~
-# OS files
+ # OS files
 .DS_Store
 Thumbs.db
+
+# Terminal ID
+.terminal-id
