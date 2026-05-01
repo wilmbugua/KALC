@@ -10,6 +10,7 @@ kalcconfig.properties.local
 .env
 .env.local
 secrets/
+kubernetes/secrets.yaml
 # Build artifacts
 /bin/
 /build/
