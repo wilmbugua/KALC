@@ -4,4 +4,24 @@
 /build/
 /manifest.mf
 /store/
+# Configuration files with credentials
 kalcconfig.properties
+kalcconfig.properties.local
+.env
+.env.local
+secrets/
+# Build artifacts
+/bin/
+/build/
+/dist/
+compile.log
+sources.txt
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+# OS files
+.DS_Store
+Thumbs.db
