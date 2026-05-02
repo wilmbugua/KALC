@@ -9,7 +9,8 @@ kalcconfig.properties
 kalcconfig.properties.local
 .env
 .env.local
-secrets/
+secrets/db_password.txt
+secrets/mysql_root_password.txt
 kubernetes/secrets.yaml
 # Build artifacts
 /bin/
