@@ -14,4 +14,8 @@ ENV DB_NAME=KALCpos
 # Use secrets instead
 RUN echo '${DB_USER}' > /run/secrets/db_user || true
 
-CMD ["java", "-cp", "kalc.jar:lib/*", "ke.kalc.pos.forms.StartPOS"]
+# Create entrypoint script for proper classpath handling
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
