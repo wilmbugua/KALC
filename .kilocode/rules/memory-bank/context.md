@@ -1,71 +1,65 @@
-# Active Context: Next.js Starter Template
+# Active Context: KALCPOS - Professional Point of Sale
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
+**Template Status**: ✅ Active Development
 
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+The KALCPOS system is a Java-based Point of Sale application with connection pooling support and database connectivity management.
 
 ## Recently Completed
 
-- [x] Base Next.js 16 setup with App Router
-- [x] TypeScript configuration with strict mode
-- [x] Tailwind CSS 4 integration
-- [x] ESLint configuration
-- [x] Memory bank documentation
-- [x] Recipe system for common features
+- [x] Base KALCPOS repository cloned and configured
+- [x] ConnectionPoolFactory added with SLF4J logging
+- [x] Apache DBCP2 connection pooling integration
+- [x] Thread-safe singleton implementation
+- [x] Pool metrics monitoring and logging
 
 ## Current Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
-| `src/app/globals.css` | Global styles | ✅ Ready |
-| `.kilocode/` | AI context & recipes | ✅ Ready |
+| `src-data/ke/kalc/data/loader/ConnectionFactory.java` | Legacy DB connection factory | ✅ Active |
+| `src-data/ke/kalc/data/loader/ConnectionPoolFactory.java` | New connection pool manager | ✅ Added |
+| `src-data/ke/kalc/data/loader/SessionFactory.java` | Hibernate session factory | ✅ Active |
+| `lib/` | Java dependencies (c3p0, mysql-connector) | ✅ Ready |
 
 ## Current Focus
 
-The template is ready. Next steps depend on user requirements:
+The connection pooling system is operational. Next steps:
 
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+1. Add SLF4J and DBCP2 libraries to `lib/` directory
+2. Configure connection pool parameters per environment
+3. Update application to use ConnectionPoolFactory
+4. Test connection pool performance
+
+## Connection Pool Configuration
+
+- **Max Total Connections**: 50
+- **Min Idle Connections**: 5
+- **Max Wait Timeout**: 30 seconds
+- **Max Idle Time**: 5 minutes
+- **Validation Query**: SELECT 1
+- **Test On Borrow**: enabled
 
 ## Quick Start Guide
 
-### To add a new page:
+### Using ConnectionPoolFactory:
 
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
+```java
+// Get connection from pool
+ConnectionPoolFactory pool = ConnectionPoolFactory.getInstance();
+Connection conn = pool.getConnection();
+
+try {
+    // Use connection
+    // ...
+} finally {
+    // Release connection back to pool
+    pool.releaseConnection(conn);
 }
-```
 
-### To add components:
-
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
-
-### To add a database:
-
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
+// Log pool metrics
+pool.logMetrics();
 ```
 
 ## Available Recipes
@@ -76,12 +70,14 @@ export async function GET() {
 
 ## Pending Improvements
 
-- [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
-- [ ] Add testing setup recipe
+- [ ] Add SLF4J and DBCP2 JARs to lib/
+- [ ] Create connection pool configuration properties
+- [ ] Add integration tests for connection pool
+- [ ] Document migration from ConnectionFactory to ConnectionPoolFactory
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
+| 2026-05-05 | Added ConnectionPoolFactory with SLF4J logging and DBCP2 connection pooling |
 | Initial | Template created with base setup |
