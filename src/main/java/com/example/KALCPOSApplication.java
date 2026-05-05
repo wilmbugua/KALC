@@ -5,11 +5,12 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Main application class for KALCPOS (Kalc Point of Sale System).
- * Demonstrates database operations, terminal management, and graceful shutdown.
+ * Demonstrates database operations, terminal management, auto-refresh, and graceful shutdown.
  */
 public class KALCPOSApplication {
     private static final Logger logger = LoggerFactory.getLogger(KALCPOSApplication.class);
@@ -23,14 +24,9 @@ public class KALCPOSApplication {
     
     private final SessionFactory sessionFactory;
     private final TerminalDataLogic terminalLogic;
+    private final Refresh refreshScheduler;
     
-    /**
-     * Constructor initializes the SessionFactory and TerminalDataLogic
-     */
-    public KALCPOSApplication() {
-        this.sessionFactory = SessionFactory.getInstance();
-        this.terminalLogic = new TerminalDataLogic("T001", "Main POS Terminal", "Store Front");
-    }
+
     
     /**
      * Inserts a new product line using DbUtils
@@ -157,6 +153,84 @@ public class KALCPOSApplication {
     }
     
     /**
+     * Demonstrates the Refresh scheduler for periodic tasks
+     */
+    public void demonstrateAutoRefresh() {
+        logger.info("\n--- Demonstrating Auto-Refresh Scheduler ---");
+        
+        // Start product line refresh every 5 seconds (using 2s for demo)
+        refreshScheduler.startProductLineRefresh(2000);
+        
+        // Let it run for a few iterations
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Sleep interrupted: {}", e.getMessage());
+        }
+        
+        logger.info("Refresh executions: {}", refreshScheduler.getExecutionCount());
+        
+        // Stop the refresh scheduler
+        refreshScheduler.stopTimer();
+        logger.info("Refresh scheduler stopped");
+    }
+    
+    /**
+     * Demonstrates custom timer tasks
+     */
+    public void demonstrateCustomTimerTask() {
+        logger.info("\n--- Demonstrating Custom Timer Task ---");
+        
+        TimerTask customTask = new TimerTask() {
+            private int count = 0;
+            
+            @Override
+            public void run() {
+                count++;
+                logger.info("Custom task execution #{} - Time: {}", 
+                    count, System.currentTimeMillis());
+                
+                if (count >= 3) {
+                    logger.info("Custom task completed 3 executions");
+                    this.cancel();
+                }
+            }
+        };
+        
+        refreshScheduler.scheduleOnce(customTask, 1000);
+        
+        // Wait for task to complete
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Sleep interrupted: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Demonstrates terminal data auto-refresh
+     */
+    public void demonstrateTerminalAutoRefresh() {
+        logger.info("\n--- Demonstrating Terminal Data Auto-Refresh ---");
+        
+        // Start terminal data refresh every 3 seconds
+        refreshScheduler.startTerminalDataRefresh(terminalLogic, 3000);
+        
+        // Let it run for a few iterations
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Sleep interrupted: {}", e.getMessage());
+        }
+        
+        refreshScheduler.stopTimer();
+        logger.info("Terminal refresh scheduler stopped");
+    }
+    
+    /**
      * Demonstrates proper shutdown handling
      */
     public void demonstrateShutdown() {
@@ -207,6 +281,15 @@ public class KALCPOSApplication {
             app.updateProductLineDescription("Clothing", "Apparel, fashion items, and accessories");
             app.demonstrateBatchOperations();
             app.listProductLinesUsingDbUtils();
+            
+            // Demonstrate auto-refresh scheduler
+            app.demonstrateAutoRefresh();
+            
+            // Demonstrate custom timer tasks
+            app.demonstrateCustomTimerTask();
+            
+            // Demonstrate terminal auto-refresh
+            app.demonstrateTerminalAutoRefresh();
             
             // Demonstrate shutdown handling
             app.demonstrateShutdown();
