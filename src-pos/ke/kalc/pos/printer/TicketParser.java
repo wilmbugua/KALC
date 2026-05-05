@@ -36,6 +36,9 @@ import ke.kalc.pos.forms.AppLocal;
 import ke.kalc.pos.datalogic.DataLogicSystem;
 import ke.kalc.pos.qrcode.BarCode;
 import ke.kalc.pos.ticket.TicketInfo;
+import java.util.logging.Logger;
+import ke.kalc.pos.forms.AppUser;
+import ke.kalc.pos.ticket.TicketType;
 
 /**
  *
@@ -44,6 +47,8 @@ import ke.kalc.pos.ticket.TicketInfo;
 public class TicketParser extends DefaultHandler {
 
     private static SAXParser m_sp = null;
+
+    private static final Logger logger = Logger.getLogger(TicketParser.class.getName());
 
     private DeviceTicket m_printer;
     private DataLogicSystem m_system;
@@ -548,6 +553,49 @@ public class TicketParser extends DefaultHandler {
             return sDefault;
         } else {
             return sValue;
+        }
+    }
+
+    /**
+     * Prints a ticket with user permission validation.
+     *
+     * @param ticket the ticket to print
+     * @param user the user attempting to print
+     * @throws SecurityException if the user lacks permission
+     */
+    public void printTicket(TicketInfo ticket, AppUser user) throws SecurityException {
+        // Validate user permissions
+        if (!AppUser.hasPermission("receipts.print")) {
+            logger.warning("User does not have print permission: " + user.getId());
+            throw new SecurityException("Insufficient permissions to print tickets.");
+        }
+
+        // Validate ticket parameters
+        if (ticket == null || ticket.getId() == null || ticket.getTicketId() <= 0) {
+            logger.warning("Invalid ticket input parameters.");
+            throw new IllegalArgumentException("Invalid ticket data.");
+        }
+
+        // Log the print operation
+        logger.info("User " + user.getId() + " is printing ticket ID: " + ticket.getTicketId());
+        performPrint(ticket);
+    }
+
+    private void performPrint(TicketInfo ticket) {
+        try {
+            String resource;
+            TicketType type = ticket.getTicketType();
+            if (type == TicketType.REFUND) {
+                resource = "Printer.TicketRefund";
+            } else if (type == TicketType.INVOICE) {
+                resource = "Printer.TicketInvoice";
+            } else {
+                resource = "Printer.Ticket";
+            }
+            String sIn = m_system.getResourceAsXML(resource);
+            printTicket(sIn, ticket);
+        } catch (TicketPrinterException e) {
+            throw new RuntimeException("Failed to print ticket", e);
         }
     }
 
