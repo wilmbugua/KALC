@@ -3,6 +3,7 @@ package com.example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
@@ -26,7 +27,14 @@ public class KALCPOSApplication {
     private final TerminalDataLogic terminalLogic;
     private final Refresh refreshScheduler;
     
-
+    /**
+     * Constructor initializes the SessionFactory, TerminalDataLogic, and Refresh scheduler
+     */
+    public KALCPOSApplication() {
+        this.sessionFactory = SessionFactory.getInstance();
+        this.terminalLogic = new TerminalDataLogic("T001", "Main POS Terminal", "Store Front");
+        this.refreshScheduler = Refresh.getInstance();
+    }
     
     /**
      * Inserts a new product line using DbUtils
@@ -231,6 +239,47 @@ public class KALCPOSApplication {
     }
     
     /**
+     * Demonstrates date formatting utilities
+     */
+    public void demonstrateDateFormatting() {
+        logger.info("\n--- Demonstrating Date Formatting Utilities ---");
+        
+        // Current date/time in various formats
+        logger.info("Current DateTime (default): {}", DateFormatUtil.getCurrentDateTime());
+        logger.info("Current Date: {}", DateFormatUtil.getCurrentDate());
+        logger.info("Current Time: {}", DateFormatUtil.getCurrentTime());
+        logger.info("Current DateTime (ISO 8601): {}", DateFormatUtil.getCurrentDateTimeISO());
+        logger.info("Current DateTime (file format): {}", DateFormatUtil.getCurrentDateTimeForFile());
+        
+        // Format a specific date
+        Date now = new Date();
+        logger.info("Formatted date: {}", DateFormatUtil.format(now));
+        logger.info("ISO formatted date: {}", DateFormatUtil.formatISO(now));
+        logger.info("Custom formatted date: {}", DateFormatUtil.format(now, "dd/MM/yyyy HH:mm"));
+        
+        // Timestamp in milliseconds
+        logger.info("Current timestamp (ms): {}", DateFormatUtil.currentTimeMillis());
+        logger.info("From milliseconds: {}", DateFormatUtil.fromMillis(DateFormatUtil.currentTimeMillis()));
+        
+        // Date validation
+        String validDate = "2026-05-05 12:30:00";
+        String invalidDate = "2026-13-45 99:99:99";
+        logger.info("Is '{}' valid? {}", validDate, DateFormatUtil.isValidFormat(validDate));
+        logger.info("Is '{}' valid? {}", invalidDate, DateFormatUtil.isValidFormat(invalidDate));
+        
+        // Parse dates
+        try {
+            Date parsedDate = DateFormatUtil.parse("2026-05-05 10:30:00");
+            logger.info("Parsed date: {}", DateFormatUtil.format(parsedDate));
+            
+            Date parsedISO = DateFormatUtil.parseISO("2026-05-05T10:30:00Z");
+            logger.info("Parsed ISO date: {}", DateFormatUtil.formatISO(parsedISO));
+        } catch (ParseException e) {
+            logger.error("Parse error: {}", e.getMessage());
+        }
+    }
+    
+    /**
      * Demonstrates proper shutdown handling
      */
     public void demonstrateShutdown() {
@@ -290,6 +339,9 @@ public class KALCPOSApplication {
             
             // Demonstrate terminal auto-refresh
             app.demonstrateTerminalAutoRefresh();
+            
+            // Demonstrate date formatting utilities
+            app.demonstrateDateFormatting();
             
             // Demonstrate shutdown handling
             app.demonstrateShutdown();
