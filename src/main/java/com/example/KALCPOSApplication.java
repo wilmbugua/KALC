@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Main application class for KALCPOS (Kalc Point of Sale System).
- * Demonstrates database operations using SessionFactory and DbUtils.
+ * Demonstrates database operations, terminal management, and graceful shutdown.
  */
 public class KALCPOSApplication {
     private static final Logger logger = LoggerFactory.getLogger(KALCPOSApplication.class);
@@ -21,12 +22,14 @@ public class KALCPOSApplication {
     private static final String DELETE_QUERY = "DELETE FROM product_line WHERE name = ?";
     
     private final SessionFactory sessionFactory;
+    private final TerminalDataLogic terminalLogic;
     
     /**
-     * Constructor initializes the SessionFactory
+     * Constructor initializes the SessionFactory and TerminalDataLogic
      */
     public KALCPOSApplication() {
         this.sessionFactory = SessionFactory.getInstance();
+        this.terminalLogic = new TerminalDataLogic("T001", "Main POS Terminal", "Store Front");
     }
     
     /**
@@ -39,36 +42,6 @@ public class KALCPOSApplication {
         int rowsAffected = DbUtils.executeUpdate(INSERT_QUERY, name, description);
         logger.info("Inserted {} row(s) for product line: {}", rowsAffected, name);
         return rowsAffected;
-    }
-    
-    /**
-     * Retrieves all product lines using DbUtils
-     */
-    public void listProductLines() {
-        logger.info("Retrieving all product lines from database...");
-        
-        try (Connection connection = sessionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            
-            logger.info("Product Lines:");
-            logger.info("─────────────────────────────────────────");
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-                Timestamp createdAt = resultSet.getTimestamp("created_at");
-                logger.info("  ID: {} | Name: {:15} | Description: {:30} | Created: {}", 
-                    id, name, description, createdAt);
-            }
-            logger.info("─────────────────────────────────────────");
-            
-        } catch (DatabaseConnectionException e) {
-            logger.error("Failed to obtain database connection: {}", e.getMessage());
-        } catch (SQLException e) {
-            logger.error("SQL Exception occurred: {}", e.getMessage());
-            logger.error("SQL State: {}, Error Code: {}", e.getSQLState(), e.getErrorCode());
-        }
     }
     
     /**
@@ -152,6 +125,58 @@ public class KALCPOSApplication {
     }
     
     /**
+     * Simulates transaction processing at the terminal
+     */
+    public void processTerminalTransactions() {
+        logger.info("\n--- Processing Terminal Transactions ---");
+        
+        // Register the terminal
+        if (terminalLogic.registerTerminal()) {
+            logger.info("Terminal registered successfully");
+            
+            // Schedule health checks every 30 seconds (using shorter interval for demo)
+            terminalLogic.scheduleHealthCheck(0, 30, TimeUnit.SECONDS);
+            
+            // Process some sample transactions
+            terminalLogic.processTransaction("SALE", new java.math.BigDecimal("49.99"));
+            terminalLogic.processTransaction("SALE", new java.math.BigDecimal("125.50"));
+            terminalLogic.processTransaction("RETURN", new java.math.BigDecimal("25.00"));
+            
+            // Get terminal information
+            TerminalDataLogic.TerminalInfo info = terminalLogic.getTerminalInfo();
+            if (info != null) {
+                logger.info("Terminal Status: {}", info.getStatus());
+                logger.info("Terminal Location: {}", info.getLocation());
+            }
+            
+            // Get recent transactions
+            List<TerminalDataLogic.TransactionRecord> transactions = 
+                terminalLogic.getRecentTransactions(10);
+            logger.info("Recent transactions for terminal: {}", transactions.size());
+        }
+    }
+    
+    /**
+     * Demonstrates proper shutdown handling
+     */
+    public void demonstrateShutdown() {
+        logger.info("\n--- Demonstrating Graceful Shutdown ---");
+        
+        // Create a separate terminal for shutdown demonstration
+        try (TerminalDataLogic demoTerminal = 
+                new TerminalDataLogic("T002", "Demo Terminal", "Back Office")) {
+            
+            demoTerminal.registerTerminal();
+            demoTerminal.processTransaction("SALE", new java.math.BigDecimal("99.99"));
+            
+            // Perform shutdown (will be auto-called by try-with-resources)
+            logger.info("Demo terminal will be shutdown automatically via AutoCloseable");
+        }
+        
+        logger.info("Demo terminal shutdown completed");
+    }
+    
+    /**
      * Main method - entry point of the application
      * @param args command line arguments
      */
@@ -168,34 +193,33 @@ public class KALCPOSApplication {
         if (factory.testConnection()) {
             logger.info("✓ Database connection test passed!\n");
             
-            // Demonstrate various operations
-            logger.info("--- 1. Inserting sample product lines ---");
+            // Demonstrate terminal data logic
+            app.processTerminalTransactions();
+            
+            // Demonstrate various database operations
+            logger.info("\n--- Product Line Operations ---");
             app.insertProductLine("Electronics", "Electronic devices and accessories");
             app.insertProductLine("Clothing", "Apparel and fashion items");
             app.insertProductLine("Food", "Grocery and food products");
             
-            logger.info("\n--- 2. Listing all product lines (manual) ---");
-            app.listProductLines();
-            
-            logger.info("\n--- 3. Listing all product lines (DbUtils) ---");
             app.listProductLinesUsingDbUtils();
-            
-            logger.info("\n--- 4. Searching for specific product line ---");
             app.findProductLineByName("Electronics");
-            
-            logger.info("\n--- 5. Updating product line description ---");
             app.updateProductLineDescription("Clothing", "Apparel, fashion items, and accessories");
-            
-            logger.info("\n--- 6. Demonstrating batch operations ---");
             app.demonstrateBatchOperations();
-            
-            logger.info("\n--- 7. Final product line listing ---");
             app.listProductLinesUsingDbUtils();
             
-            logger.info("\n--- 8. Checking table statistics ---");
+            // Demonstrate shutdown handling
+            app.demonstrateShutdown();
+            
+            // Check table statistics
+            logger.info("\n--- Database Statistics ---");
             long rowCount = DbUtils.getRowCount("product_line");
             logger.info("Total rows in product_line table: {}", rowCount);
             logger.info("Table exists: {}", DbUtils.tableExists("product_line"));
+            
+            // Shutdown main terminal
+            logger.info("\n--- Shutting Down Main Terminal ---");
+            app.terminalLogic.shutdown();
             
             logger.info("\n════════════════════════════════════════════");
             logger.info("  All operations completed successfully!");
