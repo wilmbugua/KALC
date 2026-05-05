@@ -142,35 +142,43 @@ public class TerminalDataLogic {
         if (terminal.equalsIgnoreCase("Unknown")) {
             JAlertPane.messageBox(new Dimension(450, 250), JAlertPane.INFORMATION, AppLocal.getIntString("alert.noTerminalName"), 16,
                     new Dimension(125, 50), JAlertPane.OK_OPTION);
-            System.exit(0);
-        } else {
-            try {
-                PreparedStatement pstmt = session.getConnection().prepareStatement("select count(*) from terminals where terminal_key = ? ");
-                pstmt.setString(1, TerminalInfo.getTerminalID());
-                ResultSet rsTables = pstmt.executeQuery();
-                if (rsTables.next()) {
-                    if (rsTables.getInt(1) == 0) {
-                        pstmt = session.getConnection().prepareStatement("insert into terminals (id, terminal_name, terminal_key) values (?, ?, ?)");
-                        pstmt.setString(1, TerminalInfo.getTerminalName());
-                        pstmt.setString(2, TerminalInfo.getTerminalName());
-                        pstmt.setString(3, TerminalInfo.getTerminalID());
-                        pstmt.executeUpdate();
-                    } else {
-                        pstmt = session.getConnection().prepareStatement("update terminals set id = ?, terminal_name = ? where  terminal_key = ?");
-                        pstmt.setString(1, TerminalInfo.getTerminalName());
-                        pstmt.setString(2, TerminalInfo.getTerminalName());
-                        pstmt.setString(3, TerminalInfo.getTerminalID());
-                        pstmt.executeUpdate();
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(TerminalDataLogic.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            AppConfig.put("terminalID", terminal);
-            return terminal;
+            throw new IllegalStateException("Terminal name is unknown. Configuration required.");
         }
 
-        return AppConfig.getString("terminalID");
+        // Ensure terminal record exists in database
+        String terminalId = TerminalInfo.getTerminalID();
+        try (java.sql.Connection conn = session.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement("select count(*) from terminals where terminal_key = ?")) {
+            pstmt.setString(1, terminalId);
+            try (ResultSet rsTables = pstmt.executeQuery()) {
+                if (rsTables.next()) {
+                    if (rsTables.getInt(1) == 0) {
+                        try (PreparedStatement insertStmt = conn.prepareStatement(
+                                "insert into terminals (id, terminal_name, terminal_key) values (?, ?, ?)")) {
+                            insertStmt.setString(1, terminal);
+                            insertStmt.setString(2, terminal);
+                            insertStmt.setString(3, terminalId);
+                            insertStmt.executeUpdate();
+                        }
+                    } else {
+                        try (PreparedStatement updateStmt = conn.prepareStatement(
+                                "update terminals set id = ?, terminal_name = ? where terminal_key = ?")) {
+                            updateStmt.setString(1, terminal);
+                            updateStmt.setString(2, terminal);
+                            updateStmt.setString(3, terminalId);
+                            updateStmt.executeUpdate();
+                        }
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TerminalDataLogic.class.getName()).log(Level.SEVERE, "Database error while checking terminal: {0}", ex.getMessage());
+            throw new RuntimeException("Database error while checking terminal", ex);
+        }
+
+        AppConfig.put("terminalID", terminal);
+        return terminal;
+    }
     }
 
 }

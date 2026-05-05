@@ -56,13 +56,11 @@ public class DatabaseRepair {
 
             new PreparedSentence(s, "drop trigger if exists update_payments;", null).exec();
 
-            Connection connection;
-            Statement statement = null; 
-            ResultSet resultSet = null;
-            try {
-                connection = ConnectionPoolFactory.getConnection();
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery("select * from payments");
+            // Use try-with-resources for automatic resource management
+            try (Connection connection = ConnectionPoolFactory.getConnection();
+                 Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery("select * from payments")) {
+
                 while (resultSet.next()) {
                     new PreparedSentence(s, "update payments set description = ? where id = ? ",
                             new SerializerWriteBasicExt(new Datas[]{
@@ -70,14 +68,7 @@ public class DatabaseRepair {
                         Datas.OBJECT, Datas.STRING}, new int[]{0, 1})).exec(LocalResource.getString("paymentdescription." + resultSet.getString("payment")), resultSet.getString("id"));
                 }
             } catch (SQLException ex) {
-
-            } finally {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DatabaseRepair.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                Logger.getLogger(DatabaseRepair.class.getName()).log(Level.SEVERE, "Error repairing payments: {0}", ex.getMessage());
             }
 
             String sql = " create definer = current_user "

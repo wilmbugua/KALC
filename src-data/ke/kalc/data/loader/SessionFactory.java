@@ -31,9 +31,9 @@ public class SessionFactory {
             session = new Session(ConnectionPoolFactory.getConnection());
             return session;
         } catch (SQLException ex) {
-            Logger.getLogger(SessionFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionFactory.class.getName()).log(Level.SEVERE, "Failed to create session", ex);
+            throw new RuntimeException("Failed to create database session", ex);
         }
-        return null;
     }
 
     }

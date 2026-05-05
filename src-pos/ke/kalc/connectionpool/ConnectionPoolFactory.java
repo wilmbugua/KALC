@@ -27,7 +27,7 @@ public class ConnectionPoolFactory {
 
     static {
         comboPooledDataSource = new ComboPooledDataSource();
-        
+
         comboPooledDataSource.setJdbcUrl(AppConfig.getDatabaseURL());
         comboPooledDataSource.setUser(AppConfig.getDatabaseUser());
         comboPooledDataSource.setPassword(AppConfig.getClearDatabasePassword());
@@ -36,8 +36,12 @@ public class ConnectionPoolFactory {
         comboPooledDataSource.setMaxPoolSize(10);
         comboPooledDataSource.setMaxIdleTime(1);
         comboPooledDataSource.setMaxStatements(180); //set PreaperedStatementPooling
-       // comboPooledDataSource.setMaxConnectionAge(5);
+        // comboPooledDataSource.setMaxConnectionAge(5);
         comboPooledDataSource.setAutomaticTestTable("c3p0testing");
+        // Configure timeouts for better reliability
+        comboPooledDataSource.setCheckoutTimeout(5000); // 5 seconds
+        comboPooledDataSource.setAcquireRetryAttempts(1);
+        comboPooledDataSource.setAcquireRetryDelay(1000);
     }
 
     private ConnectionPoolFactory() {
@@ -74,10 +78,6 @@ public class ConnectionPoolFactory {
 
     public static Connection getConnection() {
         try {
-            System.err.println("num_connections: " + comboPooledDataSource.getNumConnectionsDefaultUser());
-            System.err.println("num_busy_connections: " + comboPooledDataSource.getNumBusyConnectionsDefaultUser());
-            System.err.println("num_idle_connections: " + comboPooledDataSource.getNumIdleConnectionsDefaultUser());
-            System.err.println();
             return comboPooledDataSource.getConnection();
         } catch (SQLException ex) {
             throw new RuntimeException("Failed to get database connection from pool", ex);

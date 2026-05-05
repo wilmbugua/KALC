@@ -13,20 +13,17 @@
 
 package ke.kalc.pos.util;
 
-/**
-*
-* @author Xibergy Systems
-*/
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PropertyUtils {
 
+    private static final Logger logger = Logger.getLogger(PropertyUtils.class.getName());
     private Properties m_propsconfig;
     private File configFile;
     private final String APP_ID = "upos-app";
@@ -44,6 +41,11 @@ public class PropertyUtils {
     }
 
     private File getDefaultConfig() {
+        // Externalize config path via environment variable
+        String configPath = System.getenv("KALC_CONFIG");
+        if (configPath != null && !configPath.trim().isEmpty()) {
+            return new File(configPath);
+        }
         return new File(new File("./"), "KALC.properties");
     }
 
@@ -57,6 +59,7 @@ public class PropertyUtils {
                 in.close();
             }
         } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load configuration file: {0}", e.getMessage());
         }
     }
 

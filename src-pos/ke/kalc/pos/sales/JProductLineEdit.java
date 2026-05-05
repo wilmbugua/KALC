@@ -58,8 +58,6 @@ public class JProductLineEdit extends JDialog {
     private TicketLineInfo returnLine;
     private TicketLineInfo m_oLine;
     private String productID;
-    private Connection connection;
-    private PreparedStatement pstmt;
 
     //Set the fonts to be used
     private final Font lblFont = KALCFonts.DEFAULTFONT;
@@ -297,9 +295,8 @@ public class JProductLineEdit extends JDialog {
         btnUpdate.setFocusable(false);
         btnUpdate.setVisible(productID.equals("DefaultProduct") ? false : app.getAppUserView().getUser().hasPermission("db.updatedatabase"));
         btnUpdate.addActionListener((ActionEvent e) -> {
-            try {
-                connection = ConnectionFactory.getInstance().getConnection();
-                pstmt = connection.prepareStatement("update products set pricesell = ?, pricesellinc =? where id = ?");
+            try (Connection conn = ConnectionFactory.getInstance().getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement("update products set pricesell = ?, pricesellinc =? where id = ?")) {
                 pstmt.setDouble(1, Double.valueOf(m_jPrice.getText()));
                 pstmt.setDouble(2, Double.valueOf(m_jPriceTax.getText()));
                 pstmt.setString(3, productID);
@@ -308,7 +305,7 @@ public class JProductLineEdit extends JDialog {
                 m_oLine.reflectChangedPrice(Double.valueOf(m_jPrice.getText()), Double.valueOf(m_jPriceTax.getText()));
                 btnUpdate.setEnabled(false);
             } catch (SQLException ex) {
-                Logger.getLogger(JProductLineEdit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JProductLineEdit.class.getName()).log(Level.SEVERE, "Failed to update product price", ex);
             }
         });
         btnPanel.add(btnUpdate);
