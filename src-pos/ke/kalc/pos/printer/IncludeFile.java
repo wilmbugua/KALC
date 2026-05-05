@@ -20,14 +20,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 import ke.kalc.pos.datalogic.DataLogicSystem;
 
 /**
@@ -36,16 +35,11 @@ import ke.kalc.pos.datalogic.DataLogicSystem;
  */
 public class IncludeFile {
 
-    private Document doc;
-    private DocumentBuilderFactory factory;
-    private DocumentBuilder builder;
-    private NodeList nodes;
-    private Element element;
-    private HashMap<String, String> replacements = new HashMap();
-    private String newText;
+    private static final Logger logger = Logger.getLogger(IncludeFile.class.getName());
+    private static SAXParser m_saxParser = null;
     private DataLogicSystem dlSystem;
     private StringBuilder inputBuilder;
-    private int startPos;
+    private HashMap<String, String> replacements = new HashMap<>();
 
     public IncludeFile(String inputFile, DataLogicSystem dlSystem) {
         this.dlSystem = dlSystem;
@@ -53,37 +47,77 @@ public class IncludeFile {
     }
 
     public String processInclude() {
+        SAXParserFactory factory = null;
         try {
-            factory = DocumentBuilderFactory.newInstance();
+            factory = SAXParserFactory.newInstance();
             // XXE Protection
             factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            factory.setXIncludeAware(false);
-            factory.setExpandEntityReferences(false);
             factory.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
+            factory.setXIncludeAware(false);
             
-            builder = factory.newDocumentBuilder();
-            doc = builder.parse(new InputSource(new StringReader(inputBuilder.toString())));
-            nodes = doc.getElementsByTagName("include");
-            for (int i = 0; i < nodes.getLength(); i++) {
-                element = (Element) nodes.item(i);
-                newText = dlSystem.getResourceAsXML(element.getTextContent().trim());
-                if (!newText.equals("")) {
-                    replacements.put("<include>" + element.getTextContent() + "</include>", newText.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""));
-                }
+            if (m_saxParser == null) {
+                m_saxParser = factory.newSAXParser();
             }
-            Iterator it = replacements.entrySet().iterator();
+            
+            IncludeHandler handler = new IncludeHandler();
+            m_saxParser.parse(new InputSource(new StringReader(inputBuilder.toString())), handler);
+            
+            // Apply replacements
+            Iterator<Map.Entry<String, String>> it = replacements.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                startPos = inputBuilder.toString().indexOf(pair.getKey().toString());
-                inputBuilder.insert(startPos + pair.getKey().toString().length(), pair.getValue().toString());
-                inputBuilder.delete(startPos, startPos + pair.getKey().toString().length());
+                Map.Entry<String, String> pair = it.next();
+                int startPos = inputBuilder.toString().indexOf(pair.getKey());
+                if (startPos != -1) {
+                    inputBuilder.insert(startPos + pair.getKey().length(), pair.getValue());
+                    inputBuilder.delete(startPos, startPos + pair.getKey().length());
+                }
                 it.remove();
             }
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(IncludeFile.class.getName()).log(Level.SEVERE, null, ex);
+            
+            logger.info("XML includes processed successfully.");
+        } catch (ParserConfigurationException e) {
+            logger.log(Level.SEVERE, "Parser configuration error: [Message: {0}] Stack Trace: {1}", new Object[]{e.getMessage(), e});
+        } catch (SAXException e) {
+            logger.log(Level.SEVERE, "SAX parsing error: [Message: {0}] Stack Trace: {1}", new Object[]{e.getMessage(), e});
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "IO error during XML parsing: [Message: {0}] Stack Trace: {1}", new Object[]{e.getMessage(), e});
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "General error occurred during XML parsing: [Message: {0}] Stack Trace: {1}", new Object[]{e.getMessage(), e});
         }
         return inputBuilder.toString().replace("~%~", "&");
+    }
+
+    private class IncludeHandler extends DefaultHandler {
+        private boolean inInclude = false;
+        private StringBuilder includeContent = new StringBuilder();
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            if ("include".equals(qName)) {
+                inInclude = true;
+                includeContent.setLength(0);
+            }
+        }
+
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            if (inInclude) {
+                includeContent.append(ch, start, length);
+            }
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            if ("include".equals(qName)) {
+                String key = "<include>" + includeContent.toString() + "</include>";
+                String newText = dlSystem.getResourceAsXML(includeContent.toString().trim());
+                if (newText != null && !newText.isEmpty()) {
+                    replacements.put(key, newText.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""));
+                }
+                inInclude = false;
+            }
+        }
     }
 }
